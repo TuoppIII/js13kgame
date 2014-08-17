@@ -21,9 +21,28 @@ function GraphEngine( canvas ) {
 	this.boardCellSize = 18;
 	
 	// Initialization function - why use this?
-	this.init = function ( ) {
-	
+	this.init = function() {
 		
+		this.c.addEventListener("click", this.doMouseClick.bind(this) ); // TODO Route to controller?
+		
+	}
+
+	this.doMouseClick = function( event ) {
+		// TODO route event forward based on where it had happened
+		var bbox = this.c.getBoundingClientRect();
+		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
+				y: Math.floor( event.clientY - bbox.top  * (this.c.height / bbox.height) )
+			};
+		console.log( "event on coords: " + loc.x + "," + loc.y );
+		
+		if ( loc.x >= this.boardStartX && loc.x <= this.boardStartX + this.colCount * this.boardCellSize 
+			&& loc.y >= this.boardStartY && loc.y <= this.boardStartY + this.rowCount * this.boardCellSize ) 
+		{
+			var boardLoc = { x: Math.floor( ( loc.x - this.boardStartX) / this.boardCellSize ), 
+				y: Math.floor( ( loc.y - this.boardStartY) / this.boardCellSize )};
+			console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y );
+			this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
+		}
 	}
 	
 	// Draws current state of the game
@@ -37,7 +56,7 @@ function GraphEngine( canvas ) {
 		this.drawBoard();
 		
 		this.drawGame();
-	};
+	}
 	
 
 	this.drawBoard = function() {
@@ -56,12 +75,12 @@ function GraphEngine( canvas ) {
 				this.boardStartY + this.rowCount * this.boardCellSize );
 		}
 		this.ctx.stroke();
-	};
+	}
 	
 	this.drawInfo = function() {
 		this.ctx.font = "20px Arial";
 		this.ctx.fillText("Available blocks:",10,25);
-	};
+	}
 	
 	
 	this.drawGame = function() {
@@ -77,8 +96,9 @@ function GraphEngine( canvas ) {
 	
 	this.drawElement = function( element, x, y) {
 		switch ( element ) {
+		// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
 		case 'fire':
-			this.ctx.fillStyle = "#FF0000";
+			this.ctx.fillStyle = "#FF4500";
 			break;
 		case 'air':
 			this.ctx.fillStyle = "#00FFFF";
