@@ -3,14 +3,15 @@
 // All drawing stuff goes to this file. 
 // It uses somekind model where it gets its information for drawing current game situation
 
-function GraphEngine( canvas ) {
+function GraphEngine( canvas, boardModel ) {
 	// Drawing canvas and context
 	this.c = canvas;
 	this.ctx = canvas.getContext("2d");
 	
 	// Settings for game board - perhaps from board model?
-	this.rowCount = 10;
-	this.colCount = 15;
+	this.boardModel = boardModel;
+	this.rowCount = boardModel.size.X;
+	this.colCount = boardModel.size.Y;
 	
 	// Offsets for different game parts
 	this.boardStartX = 200;
@@ -79,7 +80,9 @@ function GraphEngine( canvas ) {
 	
 	this.drawInfo = function() {
 		this.ctx.font = "20px Arial";
-		this.ctx.fillText("Available blocks:",10,25);
+		this.ctx.fillText("Available blocks:",10,50);
+		
+		this.ctx.strokeText( this.boardModel.name, this.boardStartX, this.boardStartY - 10 );
 	}
 	
 	
