@@ -2,14 +2,14 @@ jsonstr = [
 {
   "id": 1,
   "name": "The Doom Bringer",
-  "size": ["10","19"],
+  "size": ["11","19"],
   "specialsquares":{
     "fire": ["0,1","1,0"],
     "air": ["0,2","0,3"],
     "water": ["3,8","3,9"],
     "earth": ["5,11","5,12"],
     "disabled": ["8,3","9,3"],
-    "blank": ["16,9","15,8"]
+    "blank": ["10,9","10,8"]
   },
   "blocks": {
     "fire": {

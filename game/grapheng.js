@@ -1,7 +1,6 @@
 
-
 // All drawing stuff goes to this file. 
-// It uses somekind model where it gets its information for drawing current game situation
+// It uses somekind of model where it gets its information for drawing current game situation
 
 function GraphEngine( canvas, boardModel ) {
 	// Drawing canvas and context
@@ -9,7 +8,7 @@ function GraphEngine( canvas, boardModel ) {
 	this.ctx = canvas.getContext("2d");
 	
 	// Settings for game board - perhaps from board model?
-	this.boardModel = boardModel;
+	this.board = boardModel;
 	this.rowCount = boardModel.size.x;
 	this.colCount = boardModel.size.y;
 	
@@ -21,12 +20,97 @@ function GraphEngine( canvas, boardModel ) {
 	this.boardBlockSize = 16;
 	this.boardCellSize = 18;
 	
-	// Initialization function - why use this?
+	// Initialization function
 	this.init = function() {
+		this.c.addEventListener("click", this.doMouseClick.bind( this ) ); // TODO Route to controller?
+	
+	};
+	
+	// Draws current state of the game
+	this.draw = function() {
+		// clear everything first
+		this.ctx.beginPath();
+		this.ctx.clearRect( 0,0, this.c.width, this.c.height );
 		
-		this.c.addEventListener("click", this.doMouseClick.bind(this) ); // TODO Route to controller?
+		// draw different parts
+		this.drawInfo();
+		this.drawBoard();
 		
+		this.drawGame();
+	};
+	
+
+	this.drawBoard = function() {
+		this.ctx.strokeStyle = "#909090"; 
+		for ( var i = 0; i < (this.rowCount + 1); i++ ) {
+			this.ctx.moveTo( this.boardStartX, 
+				this.boardStartY + i * this.boardCellSize );
+			this.ctx.lineTo( this.boardStartX + this.colCount * this.boardCellSize, 
+				this.boardStartY + i * this.boardCellSize );
+		}
+
+		for ( var i = 0; i < (this.colCount + 1); i++ ) {
+			this.ctx.moveTo( this.boardStartX + i * this.boardCellSize, 
+				this.boardStartY );
+			this.ctx.lineTo( this.boardStartX + i * this.boardCellSize, 
+				this.boardStartY + this.rowCount * this.boardCellSize );
+		}
+		this.ctx.stroke();
 	}
+	
+	this.drawInfo = function() {
+		this.ctx.font = "20px Arial";
+
+		this.ctx.fillText("Available blocks:", 10, 65);	// Does NOT work in Konqueror - valid HTML5 though
+		this.ctx.strokeText( this.board.name, this.boardStartX, this.boardStartY - 10 ); 	// Does NOT work in Konqueror - valid HTML5 though
+	}
+	
+	
+	this.drawGame = function() {
+		// Draw current game situation
+		
+		for( var row in this.board.activeBoard ) {
+			//console.log( "row: " + row );
+			for ( var column in this.board.activeBoard[row] ) {
+				console.log( "board cell: " + row + "," + column + "," + this.board.activeBoard[row][column] );
+				this.drawBoardElement( this.board.activeBoard[row][column], row, column );
+			}
+		}
+	}
+	
+	this.drawElement = function( element, x, y) {
+		switch ( element ) {
+		// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
+		// TODO Colors / images from ElementModel
+		case 'fire':
+			this.ctx.fillStyle = "#FF4500";
+			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+			break;
+		case 'air':
+			this.ctx.fillStyle = "#00FFFF";
+			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+			break;
+		case 'water':
+			this.ctx.fillStyle = "#0000FF";
+			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+			break;
+		case 'earth':
+			this.ctx.fillStyle = "#A52A2A";
+			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+			break;
+		default:
+			this.ctx.fillStyle = "#A0A0A0";
+			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+			break;
+		}
+	}
+	
+	this.drawBoardElement = function( element, x, y) {
+		this.drawElement(  element, 
+			this.boardStartX + x * this.boardCellSize + 1,
+			this.boardStartY + y * this.boardCellSize + 1);
+	}
+
 
 	this.doMouseClick = function( event ) {
 		// TODO route event forward based on where it had happened
@@ -44,100 +128,6 @@ function GraphEngine( canvas, boardModel ) {
 			console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y );
 			this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
 		}
-	}
-	
-	// Draws current state of the game
-	this.draw = function() {
-		// clear everything first
-		this.ctx.beginPath();
-		this.ctx.clearRect( 0,0, this.c.width, this.c.height );
-		
-		// draw different parts
-		this.drawInfo();
-		this.drawBoard();
-		
-		this.drawGame();
-	}
-	
-
-	this.drawBoard = function() {
-		this.ctx.strokeStyle = "#909090"; 
-		for ( var i = 0; i < this.rowCount + 1; i++ ) {
-			this.ctx.moveTo( this.boardStartX, 
-				this.boardStartY + i * this.boardCellSize );
-			this.ctx.lineTo( this.boardStartX + this.colCount * this.boardCellSize, 
-				this.boardStartY + i * this.boardCellSize );
-		}
-
-		for ( var i = 0; i < this.colCount + 1; i++ ) {
-			this.ctx.moveTo( this.boardStartX + i * this.boardCellSize, 
-				this.boardStartY );
-			this.ctx.lineTo( this.boardStartX + i * this.boardCellSize, 
-				this.boardStartY + this.rowCount * this.boardCellSize );
-		}
-		this.ctx.stroke();
-	}
-	
-	this.drawInfo = function() {
-		this.ctx.font = "20px Arial";
-		this.ctx.fillText("Available blocks:",10,50);
-		
-		this.ctx.strokeText( this.boardModel.name, this.boardStartX, this.boardStartY - 10 );
-	}
-	
-	
-	this.drawGame = function() {
-		// Draw current game situation
-		// TODO just some content now
-		
-		//this.drawBoardElement( 'fire', 0, 0 );
-		//this.drawBoardElement( 'air', 2, 3 );
-		//this.drawBoardElement( 'water', 4, 5);
-		//this.drawBoardElement( 'earth', 7, 7);
-		
-		// Draw special blocks
-		this.drawSpecialBlocks();
-		
-	}
-	
-	this.drawSpecialBlocks = function() {
-		for ( var element in this.boardModel.special_squares ) {
-			console.log( "special: " + element );
-			for ( var block in this.boardModel.special_squares[ element ] ) {
-				var position = (this.boardModel.special_squares[ element ])[ block ].split(",") ;
-				console.log( "position: " + position );
-				this.drawBoardElement( element, position[0], position[1] );
-			}
-		}
-	}
-	
-	this.drawElement = function( element, x, y) {
-		switch ( element ) {
-		// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
-		// TODO Colors / images from ElementModel
-		case 'fire':
-			this.ctx.fillStyle = "#FF4500";
-			break;
-		case 'air':
-			this.ctx.fillStyle = "#00FFFF";
-			break;
-		case 'water':
-			this.ctx.fillStyle = "#0000FF";
-			break;
-		case 'earth':
-			this.ctx.fillStyle = "#A52A2A";
-			break;
-		default:
-			this.ctx.fillStyle = "#A0A0A0";
-			break;
-		}
-		this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-	}
-	
-	this.drawBoardElement = function( element, x, y) {
-		this.drawElement(  element, 
-			this.boardStartX + x * this.boardCellSize + 1,
-			this.boardStartY + y * this.boardCellSize + 1);
 	}
 	
 }
