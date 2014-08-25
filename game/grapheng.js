@@ -3,14 +3,15 @@
 // All drawing stuff goes to this file. 
 // It uses somekind model where it gets its information for drawing current game situation
 
-function GraphEngine( canvas ) {
+function GraphEngine( canvas, boardModel ) {
 	// Drawing canvas and context
 	this.c = canvas;
 	this.ctx = canvas.getContext("2d");
 	
 	// Settings for game board - perhaps from board model?
-	this.rowCount = 10;
-	this.colCount = 15;
+	this.boardModel = boardModel;
+	this.rowCount = boardModel.size.x;
+	this.colCount = boardModel.size.y;
 	
 	// Offsets for different game parts
 	this.boardStartX = 200;
@@ -79,7 +80,9 @@ function GraphEngine( canvas ) {
 	
 	this.drawInfo = function() {
 		this.ctx.font = "20px Arial";
-		this.ctx.fillText("Available blocks:",10,25);
+		this.ctx.fillText("Available blocks:",10,50);
+		
+		this.ctx.strokeText( this.boardModel.name, this.boardStartX, this.boardStartY - 10 );
 	}
 	
 	
@@ -87,16 +90,31 @@ function GraphEngine( canvas ) {
 		// Draw current game situation
 		// TODO just some content now
 		
-		this.drawBoardElement( 'fire', 0, 0 );
-		this.drawBoardElement( 'air', 2, 3 );
-		this.drawBoardElement( 'water', 4, 5);
-		this.drawBoardElement( 'earth', 7, 7);
-			
+		//this.drawBoardElement( 'fire', 0, 0 );
+		//this.drawBoardElement( 'air', 2, 3 );
+		//this.drawBoardElement( 'water', 4, 5);
+		//this.drawBoardElement( 'earth', 7, 7);
+		
+		// Draw special blocks
+		this.drawSpecialBlocks();
+		
+	}
+	
+	this.drawSpecialBlocks = function() {
+		for ( var element in this.boardModel.special_squares ) {
+			console.log( "special: " + element );
+			for ( var block in this.boardModel.special_squares[ element ] ) {
+				var position = (this.boardModel.special_squares[ element ])[ block ].split(",") ;
+				console.log( "position: " + position );
+				this.drawBoardElement( element, position[0], position[1] );
+			}
+		}
 	}
 	
 	this.drawElement = function( element, x, y) {
 		switch ( element ) {
 		// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
+		// TODO Colors / images from ElementModel
 		case 'fire':
 			this.ctx.fillStyle = "#FF4500";
 			break;
@@ -110,6 +128,7 @@ function GraphEngine( canvas ) {
 			this.ctx.fillStyle = "#A52A2A";
 			break;
 		default:
+			this.ctx.fillStyle = "#A0A0A0";
 			break;
 		}
 		this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
