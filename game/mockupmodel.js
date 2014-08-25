@@ -6,10 +6,10 @@ function MockupModel( ) {
 	this.name = "Mockup model level";
 	
 	// Board size
-	this.size = { x: 10, y: 20 };	
+	this.size = { x: 16, y: 19 };	
 	
-	this.special_squares = {
-		fire : ["0,1","1,0"],
+	this.specials = {
+		fire : ["0,1","1,0", "1,1,2,2"],
 		air : ["0,2","0,3"],
 		water : ["3,8","3,9"],
 		earth : ["5,11","5,12"],
