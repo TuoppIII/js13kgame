@@ -4,15 +4,16 @@
 
 // Board model
 var map = new MapModel();
-map.init( 1 );
+map.init( 100 );
 
 //var board = new MockupModel( );
 
-// TODO init controller
+// init controller
+var controller = new MapController( map );
 
 // Init graph engine
 var canvas = document.getElementById("testCanvas");
-var graph = new GraphEngine( canvas, map );
+var graph = new GraphEngine( canvas, map, controller );
 graph.init();
 
 // Draw initial setup

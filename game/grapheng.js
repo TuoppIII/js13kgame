@@ -2,24 +2,27 @@
 // All drawing stuff goes to this file. 
 // It uses somekind of model where it gets its information for drawing current game situation
 
-function GraphEngine( canvas, boardModel ) {
+function GraphEngine( canvas, boardModel, boardController ) {
 	// Drawing canvas and context
 	this.c = canvas;
 	this.ctx = canvas.getContext("2d");
 	
 	// Settings for game board - perhaps from board model?
 	this.board = boardModel;
-	this.rowCount = boardModel.size.x;
-	this.colCount = boardModel.size.y;
+	this.controller = boardController;
+	this.rowCount = boardModel.size.y;
+	this.colCount = boardModel.size.x;
 	
 	// Offsets for different game parts
 	this.boardStartX = 200;
 	this.boardStartY = 50;
+	this.boardBlockX = 10;
+	this.boardBlockY = 80;	
 	
 	// defaults for block and cell sizes
 	this.boardBlockSize = 16;
 	this.boardCellSize = 18;
-	
+
 	// Initialization function
 	this.init = function() {
 		this.c.addEventListener("click", this.doMouseClick.bind( this ) ); // TODO Route to controller?
@@ -35,6 +38,8 @@ function GraphEngine( canvas, boardModel ) {
 		// draw different parts
 		this.drawInfo();
 		this.drawBoard();
+		
+		this.drawBlocks();
 		
 		this.drawGame();
 	};
@@ -110,6 +115,34 @@ function GraphEngine( canvas, boardModel ) {
 			this.boardStartX + x * this.boardCellSize + 1,
 			this.boardStartY + y * this.boardCellSize + 1);
 	}
+	
+	this.drawBlocks = function( ) {
+		// Draw available block based on board
+		for ( var element in this.board.blocks ) {
+			for ( var block in this.board.blocks[element] ) {
+				console.log("block: " + element + " " + block + " " +
+					this.board.blocks[element][block]);
+				switch ( block ) {
+					case 'sq':
+						this.ctx.fillStyle = "#A52A2A";
+						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
+							this.boardBlockSize * 2, this.boardBlockSize * 2);
+						this.boardBlockY += 50;
+						break;
+					case 'l':
+						this.ctx.fillStyle = "#A52A2A";
+						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
+							this.boardBlockSize, this.boardBlockSize * 3);
+						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
+							this.boardBlockSize * 2, this.boardBlockSize );
+						this.boardBlockY += 75;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	}
 
 
 	this.doMouseClick = function( event ) {
@@ -117,16 +150,19 @@ function GraphEngine( canvas, boardModel ) {
 		var bbox = this.c.getBoundingClientRect();
 		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
 				y: Math.floor( event.clientY - bbox.top  * (this.c.height / bbox.height) )
-			};
+			}; 
 		console.log( "event on coords: " + loc.x + "," + loc.y );
 		
 		if ( loc.x >= this.boardStartX && loc.x <= this.boardStartX + this.colCount * this.boardCellSize 
 			&& loc.y >= this.boardStartY && loc.y <= this.boardStartY + this.rowCount * this.boardCellSize ) 
 		{
+			// Forward clicks to board to board controller
 			var boardLoc = { x: Math.floor( ( loc.x - this.boardStartX) / this.boardCellSize ), 
 				y: Math.floor( ( loc.y - this.boardStartY) / this.boardCellSize )};
 			console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y );
-			this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
+			//this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
+			this.controller.addElement( 'fire', boardLoc.x, boardLoc.y);
+			this.drawGame();
 		}
 	}
 	
