@@ -3,7 +3,7 @@
 // TODO init model
 
 // Board model
-var map = new MapModel();
+var map = new MapModel( );
 map.init( 100 );
 
 //var board = new MockupModel( );
