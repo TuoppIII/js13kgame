@@ -13,8 +13,7 @@ function MapModel( canvas ) {
 		this.id = id;
 		this.name = lookup[id].name;
 		this.specials = lookup[id].special_squares;
-		this.size = { x: parseInt( lookup[id].size[0] ),
-					y: parseInt( lookup[id].size[1] ) };
+		this.size = lookup[id].size;
 		this.blocks = lookup[id].blocks;
 		
 		// Init board & data
