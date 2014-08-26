@@ -22,11 +22,14 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	// defaults for block and cell sizes
 	this.boardBlockSize = 16;
 	this.boardCellSize = 18;
+	
+	this.addingElement = false;
+	this.lastLoc = { x:0, y:0 };
 
 	// Initialization function
 	this.init = function() {
-		this.c.addEventListener("click", this.doMouseClick.bind( this ) ); // TODO Route to controller?
-	
+		this.c.addEventListener("click", this.doMouseClick.bind( this ) );
+		this.c.addEventListener("mousemove", this.doMouseMove.bind( this ) );
 	};
 	
 	// Draws current state of the game
@@ -85,29 +88,25 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	this.drawElement = function( element, x, y) {
 		switch ( element ) {
-		// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
-		// TODO Colors / images from ElementModel
-		case 'fire':
-			this.ctx.fillStyle = "#FF4500";
-			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-			break;
-		case 'air':
-			this.ctx.fillStyle = "#00FFFF";
-			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-			break;
-		case 'water':
-			this.ctx.fillStyle = "#0000FF";
-			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-			break;
-		case 'earth':
-			this.ctx.fillStyle = "#A52A2A";
-			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-			break;
-		default:
-			this.ctx.fillStyle = "#A0A0A0";
-			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-			break;
+			// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
+			// TODO Colors / images from ElementModel
+			case 'fire':
+				this.ctx.fillStyle = "#FF4500";
+				break;
+			case 'air':
+				this.ctx.fillStyle = "#00FFFF";
+				break;
+			case 'water':
+				this.ctx.fillStyle = "#0000FF";
+				break;
+			case 'earth':
+				this.ctx.fillStyle = "#A52A2A";
+				break;
+			default:
+				this.ctx.fillStyle = "#A0A0A0";
+				break;
 		}
+		this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
 	}
 	
 	this.drawBoardElement = function( element, x, y) {
@@ -119,24 +118,63 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawBlocks = function( ) {
 		// Draw available block based on board
 		for ( var element in this.board.blocks ) {
+			switch ( element ) {
+				// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
+				// TODO Colors / images from ElementModel
+				case 'fire':
+					this.ctx.fillStyle = "#FF4500";
+					break;
+				case 'air':
+					this.ctx.fillStyle = "#00FFFF";
+					break;
+				case 'water':
+					this.ctx.fillStyle = "#0000FF";
+					break;
+				case 'earth':
+					this.ctx.fillStyle = "#A52A2A";
+					break;
+				default:
+					this.ctx.fillStyle = "#A0A0A0";
+					break;
+			}
 			for ( var block in this.board.blocks[element] ) {
 				console.log("block: " + element + " " + block + " " +
 					this.board.blocks[element][block]);
 				switch ( block ) {
+					case 's':
+						this.ctx.fillRect( this.boardBlockX, this.boardBlockY,
+							this.boardBlockSize * 2, this.boardBlockSize );
+						this.ctx.fillRect( this.boardBlockX + this.boardBlockSize, 
+							this.boardBlockY + this.boardBlockSize,
+							this.boardBlockSize * 2, this.boardBlockSize );						
+						this.boardBlockY += this.boardBlockSize * 3;
+						break;
 					case 'sq':
-						this.ctx.fillStyle = "#A52A2A";
 						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
 							this.boardBlockSize * 2, this.boardBlockSize * 2);
-						this.boardBlockY += 50;
+						this.boardBlockY += this.boardBlockSize * 3;
 						break;
 					case 'l':
-						this.ctx.fillStyle = "#A52A2A";
 						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
-							this.boardBlockSize, this.boardBlockSize * 3);
-						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
-							this.boardBlockSize * 2, this.boardBlockSize );
-						this.boardBlockY += 75;
+							this.boardBlockSize * 3, this.boardBlockSize);
+						this.ctx.fillRect( this.boardBlockX, 
+							this.boardBlockY + this.boardBlockSize, 
+							this.boardBlockSize, this.boardBlockSize );
+						this.boardBlockY += this.boardBlockSize * 3;
 						break;
+					case 't':
+						this.ctx.fillRect( this.boardBlockX, this.boardBlockY,
+							this.boardBlockSize * 3, this.boardBlockSize );
+						this.ctx.fillRect( this.boardBlockX + this.boardBlockSize, 
+							this.boardBlockY + this.boardBlockSize,
+							this.boardBlockSize, this.boardBlockSize );						
+						this.boardBlockY += this.boardBlockSize * 3;
+						break;
+					case 'i':
+						this.ctx.fillRect( this.boardBlockX, this.boardBlockY,
+							this.boardBlockSize * 4, this.boardBlockSize );
+						this.boardBlockY += this.boardBlockSize * 2;
+						break;						
 					default:
 						break;
 				}
@@ -144,6 +182,15 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		}
 	}
 
+	this.insideBoard = function( x, y ) {
+		return ( x >= this.boardStartX && x <= this.boardStartX + this.colCount * this.boardCellSize 
+			&& y >= this.boardStartY && y <= this.boardStartY + this.rowCount * this.boardCellSize );
+	}
+	
+	this.boardLoc = function ( locx, locy ) {
+		return { x: Math.floor( ( locx - this.boardStartX) / this.boardCellSize ), 
+				y: Math.floor( ( locy - this.boardStartY) / this.boardCellSize )};
+	}
 
 	this.doMouseClick = function( event ) {
 		// TODO route event forward based on where it had happened
@@ -153,17 +200,45 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			}; 
 		console.log( "event on coords: " + loc.x + "," + loc.y );
 		
-		if ( loc.x >= this.boardStartX && loc.x <= this.boardStartX + this.colCount * this.boardCellSize 
-			&& loc.y >= this.boardStartY && loc.y <= this.boardStartY + this.rowCount * this.boardCellSize ) 
+		if ( this.insideBoard( loc.x, loc.y ) ) 
 		{
 			// Forward clicks to board to board controller
-			var boardLoc = { x: Math.floor( ( loc.x - this.boardStartX) / this.boardCellSize ), 
-				y: Math.floor( ( loc.y - this.boardStartY) / this.boardCellSize )};
-			console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y );
+			var boardLoc = this.boardLoc( loc.x, loc.y );
+			console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y + "," + this.addingElement);
 			//this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
-			this.controller.addElement( 'fire', boardLoc.x, boardLoc.y);
-			this.drawGame();
+			//this.controller.addElement( 'fire', boardLoc.x, boardLoc.y);
+			//this.drawGame();
+			
+			this.addingElement = !this.addingElement;
 		}
 	}
-	
+
+	this.doMouseMove = function( event ) {
+		var bbox = this.c.getBoundingClientRect();
+		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
+				y: Math.floor( event.clientY - bbox.top  * (this.c.height / bbox.height) )
+			}; 
+		if ( this.insideBoard( loc.x, loc.y ) && this.addingElement ) 
+		{
+			var boardLoc = this.boardLoc( loc.x, loc.y );
+			if ( boardLoc.x != this.lastLoc.x || boardLoc.y != this.lastLoc.y ) {
+				//console.log("Movement on The Board, coords: " + boardLoc.x + "," + boardLoc.y 
+				//	+ "/" + this.lastLoc.x + "," + this.lastLoc.y );
+
+				if ( this.boardState ) {
+					this.ctx.putImageData( this.boardState, this.boardStartX, this.boardStartY );
+				}
+				// Save current board so that we can draw over it
+				this.boardState = this.ctx.getImageData( this.boardStartX, this.boardStartY, 
+					this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize 
+					);
+				
+				this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
+				
+				// Save current location
+				this.lastLoc = boardLoc;
+
+			}
+		}
+	}
 }
