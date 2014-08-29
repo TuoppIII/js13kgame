@@ -102,6 +102,15 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			case 'earth':
 				this.ctx.fillStyle = "#A52A2A";
 				break;
+			case 'disabled':
+				this.ctx.fillStyle = "#A0A0A0";
+				break;
+			case 'optional':
+				this.ctx.fillStyle = "#ebebeb";
+				break;
+			case 'blank':
+				this.ctx.fillStyle = "#ff8ecf";
+				break;
 			default:
 				this.ctx.fillStyle = "#A0A0A0";
 				break;

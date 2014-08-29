@@ -30,8 +30,31 @@ function MapModel( canvas ) {
 			//console.log( "special: " + element );
 			for ( var block in this.specials[ element ] ) {
 				var position = (this.specials[ element ])[ block ].split(",") ;
-				console.log( "position: " + position[0] + "/" + position[1] + "/" + element );
-				this.activeBoard[ position[0] ][ position[1] ] = element;
+				var xArr = [position[0],position[2] || position[0]].sort();
+				var yArr = [position[1],position[3] || position[1]].sort();
+
+				if(xArr[ 0 ] == xArr[ 1 ]){
+					x = xArr[0];
+					for(y = yArr[ 0 ]; y <= yArr[ 1 ]; y++){
+						console.log( "position: " + x + "/" + y + "/" + element );
+						this.activeBoard[ x ][ y ] = element;
+					}
+				}
+				else if(yArr[ 0 ] == yArr[ 1 ]){
+					y = yArr[0];
+					for(x = xArr[ 0 ]; x <= xArr[ 1 ]; x++){
+						console.log( "position: " + x + "/" + y + "/" + element );
+						this.activeBoard[ x ][ y ] = element;
+					}
+				}
+				else{
+					for(x = xArr[ 0 ]; x <= xArr[ 1 ] ; x++){
+						for(y = yArr[ 0 ]; y < yArr[ 1 ]; y++){
+							console.log( "position: " + x + "/" + y + "/" + element );
+							this.activeBoard[ x ][ y ] = element;
+						}
+					}
+				}
 			}
 		}
 	}
