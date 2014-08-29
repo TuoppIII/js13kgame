@@ -7,10 +7,48 @@
   </head>
   <body>
     <h1>Element game</h1>
-    <canvas id="testCanvas" width="700" height="400"
-      style="border:1px solid #000000;">
+	<table style="border:1px solid #000000;">
+	<tr>
+	<td>
+    <canvas id="testCanvas" width="500" height="400" style="float:left;">
+   
     </canvas>
-    <script src="maps.json"></script>
+	</td>
+	<td>
+    <table style="float:left;">
+		<tr>
+			<td><img src="./images/fire.png" alt="fire"></td>
+			<td>Fire: Burns earth</td>
+		</tr>
+		<tr>
+			<td><img src="./images/water.png" alt="water"></td>
+			<td>Water: Floods earth and puts out fire</td>
+		</tr>
+		<tr>
+			<td><img src="./images/air.png" alt="air"></td>
+			<td>Air: Can be put next to any block</td>
+		</tr>
+		<tr>
+			<td><img src="./images/earth.png" alt="earth"></td>
+			<td>Earth: No special skill</td>
+		</tr>
+		<tr>
+			<td><img src="./images/optional.png" alt="optional"></td>
+			<td>Optional: Can be left empty or filled</td>
+		</tr>
+		<tr>
+			<td><img src="./images/blank.png" alt="blank"></td>
+			<td>Blank: Must be left empty</td>
+		</tr>
+		<tr>
+			<td><img src="./images/disabled.png" alt="disabled"></td>
+			<td>Disabled: Not in use</td>
+		</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	<script src="maps.json"></script>
     <script src="grapheng.js"></script>
     <script src="mockupmodel.js"></script>
     <script src="mapmodel.js"></script>
