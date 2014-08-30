@@ -30,8 +30,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	// Initialization function
 	this.init = function() {
-		this.c.addEventListener("click", this.doMouseClick.bind( this ) );
-		this.c.addEventListener("mousemove", this.doMouseMove.bind( this ) );
+		this.c.addEventListener( "click", this.doMouseClick.bind( this ) );
+		this.c.addEventListener( "mousemove", this.doMouseMove.bind( this ) );
+		window.addEventListener( "keydown", this.doKeyDown.bind( this ), false );
 	};
 	
 	// Draws current state of the game
@@ -189,6 +190,35 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		}
 	}
 
+	this.drawBlockOnBoard = function( x, y ) {
+		switch ( this.addingElement.type ) {
+			case 's':
+				// TODO
+				break;
+			case 'sq':
+				x = x > this.colCount - 2 ? this.colCount - 2 : x;
+				y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
+				this.drawBoardElement( this.addingElement.element, x, y );
+				this.drawBoardElement( this.addingElement.element, x + 1, y );
+				this.drawBoardElement( this.addingElement.element, x, y + 1 );
+				this.drawBoardElement( this.addingElement.element, x + 1 , y + 1 );
+				break;
+			case 'l':
+				// TODO
+				break;
+			case 't':
+				// TODO
+				break;
+			case 'i':
+				// TODO
+				break;						
+			default:
+				break;
+		}
+		this.activeBlockX = x;
+		this.activeBlockY = y;
+	}
+
 	this.insideBoard = function( x, y ) {
 		return ( x >= this.boardStartX && x <= this.boardStartX + this.colCount * this.boardCellSize 
 			&& y >= this.boardStartY && y <= this.boardStartY + this.rowCount * this.boardCellSize );
@@ -265,34 +295,10 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			}
 		}
 	}
-
 	
-	this.drawBlockOnBoard = function( x, y ) {
-		switch ( this.addingElement.type ) {
-			case 's':
-				// TODO
-				break;
-			case 'sq':
-				x = x > this.colCount - 2 ? this.colCount - 2 : x;
-				y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
-				this.drawBoardElement( this.addingElement.element, x, y );
-				this.drawBoardElement( this.addingElement.element, x + 1, y );
-				this.drawBoardElement( this.addingElement.element, x, y + 1 );
-				this.drawBoardElement( this.addingElement.element, x + 1 , y + 1 );
-				break;
-			case 'l':
-				// TODO
-				break;
-			case 't':
-				// TODO
-				break;
-			case 'i':
-				// TODO
-				break;						
-			default:
-				break;
-		}
-		this.activeBlockX = x;
-		this.activeBlockY = y;
+	this.doKeyDown = function( event ) {
+		console.log( "key event: " + event.keyCode );
+		// TODO route to controller to handle block orientation
 	}
+	
 }
