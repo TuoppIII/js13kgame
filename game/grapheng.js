@@ -17,7 +17,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.boardStartX = 200;
 	this.boardStartY = 50;
 	this.boardBlockX = 10;
-	this.boardBlockY = 80;	
+	this.boardBlockY = 80;
 	
 	// defaults for block and cell sizes
 	this.boardBlockSize = 16;
@@ -39,13 +39,14 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		// clear everything first
 		this.ctx.beginPath();
 		this.ctx.clearRect( 0,0, this.c.width, this.c.height );
+
+		this.boardBlockX = 10;
+		this.boardBlockY = 80;
 		
 		// draw different parts
 		this.drawInfo();
 		this.drawBoard();
-		
 		this.drawBlocks();
-		
 		this.drawGame();
 	};
 	
@@ -77,10 +78,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	
 	this.drawGame = function() {
-		// Draw current game situation
-		
+		// Draw current game situation		
 		for( var row in this.board.activeBoard ) {
-			//console.log( "row: " + row );
+			console.log( "row: " + row );
 			for ( var column in this.board.activeBoard[row] ) {
 				console.log( "board cell: " + row + "," + column + "," + this.board.activeBoard[row][column] );
 				this.drawBoardElement( this.board.activeBoard[row][column], row, column );
@@ -131,12 +131,13 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	}
 	
 	this.drawBlocks = function( ) {
+		this.activeBlocks = []; // reset bounding boxes for available blocks
+		
 		// Draw available block based on board
 		for ( var element in this.board.blocks ) {
 			this.setElementFill( element );
 			for ( var block in this.board.blocks[element] ) {
-				console.log("block: " + element + " " + block + " " +
-					this.board.blocks[element][block]);
+				// console.log("block: " + element + " " + block + " " + this.board.blocks[element][block]);
 				var amount = this.board.blocks[element][block];
 				if ( amount == 0 ) {
 					// Don't draw empty blocks
@@ -210,18 +211,17 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		{
 			// Forward clicks to board to board controller
 			var boardLoc = this.boardLoc( loc.x, loc.y );
-			console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y + "," + this.addingElement);
-			//this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
-			//this.controller.addElement( 'fire', boardLoc.x, boardLoc.y);
-			//this.drawGame();
+			//console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y + "," + this.addingElement);
 			
 			if ( this.addingElement ) {
-				// TODO Draw element to board controller
-				
+				// Draw element to board controller
+				this.controller.addBlock( this.addingElement.element, this.addingElement.type, this.activeBlockX, this.activeBlockY ); // TODO Orientation
+
 				this.boardState = false;
+				this.addingElement = false;
+				this.draw();
 			}
 			
-			this.addingElement = !this.addingElement;
 		} else {
 			// Check if block was selected
 			for ( var i in this.activeBlocks ) {
@@ -231,11 +231,12 @@ function GraphEngine( canvas, boardModel, boardController ) {
 					
 					console.log( "Selected block " + this.activeBlocks[i].blockelement + " " + this.activeBlocks[i].blocktype );
 					// TODO push info to board controller
+					this.addingElement = { element: this.activeBlocks[i].blockelement, type: this.activeBlocks[i].blocktype };
 				}
 			}
 		}
 	}
-
+	
 	this.doMouseMove = function( event ) {
 		var bbox = this.c.getBoundingClientRect();
 		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
@@ -256,12 +257,42 @@ function GraphEngine( canvas, boardModel, boardController ) {
 					this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize 
 					);
 				
-				this.drawBoardElement( 'fire', boardLoc.x, boardLoc.y );
+				// Draw block baesed on type and element
+				this.drawBlockOnBoard( boardLoc.x, boardLoc.y );
 				
 				// Save current location
 				this.lastLoc = boardLoc;
-
 			}
 		}
+	}
+
+	
+	this.drawBlockOnBoard = function( x, y ) {
+		switch ( this.addingElement.type ) {
+			case 's':
+				// TODO
+				break;
+			case 'sq':
+				x = x > this.colCount - 2 ? this.colCount - 2 : x;
+				y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
+				this.drawBoardElement( this.addingElement.element, x, y );
+				this.drawBoardElement( this.addingElement.element, x + 1, y );
+				this.drawBoardElement( this.addingElement.element, x, y + 1 );
+				this.drawBoardElement( this.addingElement.element, x + 1 , y + 1 );
+				break;
+			case 'l':
+				// TODO
+				break;
+			case 't':
+				// TODO
+				break;
+			case 'i':
+				// TODO
+				break;						
+			default:
+				break;
+		}
+		this.activeBlockX = x;
+		this.activeBlockY = y;
 	}
 }
