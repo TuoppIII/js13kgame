@@ -26,6 +26,8 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.addingElement = false;
 	this.lastLoc = { x:0, y:0 };
 
+	this.activeBlocks = [];
+	
 	// Initialization function
 	this.init = function() {
 		this.c.addEventListener("click", this.doMouseClick.bind( this ) );
@@ -85,8 +87,8 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			}
 		}
 	}
-	
-	this.drawElement = function( element, x, y) {
+
+	this.setElementFill = function ( element ) {
 		switch ( element ) {
 			// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
 			// TODO Colors / images from ElementModel
@@ -115,6 +117,10 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				this.ctx.fillStyle = "#A0A0A0";
 				break;
 		}
+	}
+	
+	this.drawElement = function( element, x, y) {
+		this.setElementFill( element );
 		this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
 	}
 	
@@ -127,41 +133,34 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawBlocks = function( ) {
 		// Draw available block based on board
 		for ( var element in this.board.blocks ) {
-			switch ( element ) {
-				// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
-				// TODO Colors / images from ElementModel
-				case 'fire':
-					this.ctx.fillStyle = "#FF4500";
-					break;
-				case 'air':
-					this.ctx.fillStyle = "#00FFFF";
-					break;
-				case 'water':
-					this.ctx.fillStyle = "#0000FF";
-					break;
-				case 'earth':
-					this.ctx.fillStyle = "#37E21D";
-					break;
-				default:
-					this.ctx.fillStyle = "#A0A0A0";
-					break;
-			}
+			this.setElementFill( element );
 			for ( var block in this.board.blocks[element] ) {
 				console.log("block: " + element + " " + block + " " +
 					this.board.blocks[element][block]);
+				var amount = this.board.blocks[element][block];
+				if ( amount == 0 ) {
+					// Don't draw empty blocks
+					continue;
+				}
+				// Show amount and save "bounding box" for later use
+				this.ctx.fillText( "x " + amount, this.boardBlockX + this.boardBlockSize * 5, this.boardBlockY + this.boardBlockSize );
+				this.activeBlocks.push( { 
+					x1: this.boardBlockX, y1: this.boardBlockY, 
+					x2: this.boardBlockX + this.boardBlockSize * 2, 
+					y2: this.boardBlockY + this.boardBlockSize * 4, 
+					blocktype: block, blockelement: element }  ); 
+				// Draw the block
 				switch ( block ) {
 					case 's':
 						this.ctx.fillRect( this.boardBlockX, this.boardBlockY,
 							this.boardBlockSize * 2, this.boardBlockSize );
 						this.ctx.fillRect( this.boardBlockX + this.boardBlockSize, 
 							this.boardBlockY + this.boardBlockSize,
-							this.boardBlockSize * 2, this.boardBlockSize );						
-						this.boardBlockY += this.boardBlockSize * 3;
+							this.boardBlockSize * 2, this.boardBlockSize );
 						break;
 					case 'sq':
 						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
 							this.boardBlockSize * 2, this.boardBlockSize * 2);
-						this.boardBlockY += this.boardBlockSize * 3;
 						break;
 					case 'l':
 						this.ctx.fillRect( this.boardBlockX, this.boardBlockY, 
@@ -169,7 +168,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 						this.ctx.fillRect( this.boardBlockX, 
 							this.boardBlockY + this.boardBlockSize, 
 							this.boardBlockSize, this.boardBlockSize );
-						this.boardBlockY += this.boardBlockSize * 3;
 						break;
 					case 't':
 						this.ctx.fillRect( this.boardBlockX, this.boardBlockY,
@@ -177,16 +175,15 @@ function GraphEngine( canvas, boardModel, boardController ) {
 						this.ctx.fillRect( this.boardBlockX + this.boardBlockSize, 
 							this.boardBlockY + this.boardBlockSize,
 							this.boardBlockSize, this.boardBlockSize );						
-						this.boardBlockY += this.boardBlockSize * 3;
 						break;
 					case 'i':
 						this.ctx.fillRect( this.boardBlockX, this.boardBlockY,
 							this.boardBlockSize * 4, this.boardBlockSize );
-						this.boardBlockY += this.boardBlockSize * 2;
 						break;						
 					default:
 						break;
 				}
+				this.boardBlockY += this.boardBlockSize * 3;
 			}
 		}
 	}
@@ -218,7 +215,24 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			//this.controller.addElement( 'fire', boardLoc.x, boardLoc.y);
 			//this.drawGame();
 			
+			if ( this.addingElement ) {
+				// TODO Draw element to board controller
+				
+				this.boardState = false;
+			}
+			
 			this.addingElement = !this.addingElement;
+		} else {
+			// Check if block was selected
+			for ( var i in this.activeBlocks ) {
+				//console.log( this.activeBlocks[i].x1, this.activeBlocks[i].y1, this.activeBlocks[i].x2, this.activeBlocks[i].y2 );
+				if ( loc.x > this.activeBlocks[i].x1 && loc.x < this.activeBlocks[i].x2 &&
+					loc.y > this.activeBlocks[i].y1 && loc.y < this.activeBlocks[i].y2 ) {
+					
+					console.log( "Selected block " + this.activeBlocks[i].blockelement + " " + this.activeBlocks[i].blocktype );
+					// TODO push info to board controller
+				}
+			}
 		}
 	}
 
