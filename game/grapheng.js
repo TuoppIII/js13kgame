@@ -25,7 +25,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	this.addingElement = false;
 	this.lastLoc = { x:0, y:0 };
+	this.orientation = 0;
 
+	
 	this.activeBlocks = [];
 	
 	// Initialization function
@@ -81,7 +83,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawGame = function() {
 		// Draw current game situation		
 		for( var row in this.board.activeBoard ) {
-			console.log( "row: " + row );
 			for ( var column in this.board.activeBoard[row] ) {
 				console.log( "board cell: " + row + "," + column + "," + this.board.activeBoard[row][column] );
 				this.drawBoardElement( this.board.activeBoard[row][column], row, column );
@@ -148,8 +149,8 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				this.ctx.fillText( "x " + amount, this.boardBlockX + this.boardBlockSize * 5, this.boardBlockY + this.boardBlockSize );
 				this.activeBlocks.push( { 
 					x1: this.boardBlockX, y1: this.boardBlockY, 
-					x2: this.boardBlockX + this.boardBlockSize * 2, 
-					y2: this.boardBlockY + this.boardBlockSize * 4, 
+					x2: this.boardBlockX + this.boardBlockSize * 4, 
+					y2: this.boardBlockY + this.boardBlockSize * 2, 
 					blocktype: block, blockelement: element }  ); 
 				// Draw the block
 				switch ( block ) {
@@ -190,6 +191,14 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		}
 	}
 
+	this.drawBlockShape = function( x1, y1, x2, y2, x3, y3, x4, y4 ) {
+		this.drawBoardElement( this.addingElement.element, x1, y1 );
+		this.drawBoardElement( this.addingElement.element, x2, y2 );
+		this.drawBoardElement( this.addingElement.element, x3, y3 );
+		this.drawBoardElement( this.addingElement.element, x4, y4 );
+
+	}
+	
 	this.drawBlockOnBoard = function( x, y ) {
 		switch ( this.addingElement.type ) {
 			case 's':
@@ -198,13 +207,26 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			case 'sq':
 				x = x > this.colCount - 2 ? this.colCount - 2 : x;
 				y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
-				this.drawBoardElement( this.addingElement.element, x, y );
-				this.drawBoardElement( this.addingElement.element, x + 1, y );
-				this.drawBoardElement( this.addingElement.element, x, y + 1 );
-				this.drawBoardElement( this.addingElement.element, x + 1 , y + 1 );
+				this.drawBlockShape( x, y, x + 1, y, x, y + 1, x + 1, y + 1 );
 				break;
 			case 'l':
-				// TODO
+				if ( this.orientation == 0 || this.orientation == 2 ) {
+					x = x > this.colCount - 3 ? this.colCount - 3 : x;
+					y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
+					if ( this.orientation == 0 ) {
+						this.drawBlockShape( x, y, x + 1, y, x + 2, y, x, y + 1 );
+					} else {
+						this.drawBlockShape( x, y + 1, x + 1, y + 1, x + 2, y + 1, x + 2, y );
+					}
+				} else {
+					x = x > this.colCount - 2 ? this.colCount - 2 : x;
+					y = y > this.rowCount - 3 ? this.rowCount - 3 : y;
+					if ( this.orientation == 1 ) {
+						this.drawBlockShape( x, y, x + 1, y, x + 1, y + 1, x + 1, y + 2 );
+					} else {
+						this.drawBlockShape( x, y, x, y + 1, x, y + 2, x + 1, y + 2 );
+					}
+				}
 				break;
 			case 't':
 				// TODO
@@ -245,7 +267,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			
 			if ( this.addingElement ) {
 				// Draw element to board controller
-				this.controller.addBlock( this.addingElement.element, this.addingElement.type, this.activeBlockX, this.activeBlockY ); // TODO Orientation
+				this.controller.addBlock( this.addingElement.element, this.addingElement.type, this.activeBlockX, this.activeBlockY, this.orientation ); // TODO Orientation
 
 				this.boardState = false;
 				this.addingElement = false;
@@ -255,16 +277,30 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		} else {
 			// Check if block was selected
 			for ( var i in this.activeBlocks ) {
-				//console.log( this.activeBlocks[i].x1, this.activeBlocks[i].y1, this.activeBlocks[i].x2, this.activeBlocks[i].y2 );
+				console.log( this.activeBlocks[i].x1, this.activeBlocks[i].y1, this.activeBlocks[i].x2, this.activeBlocks[i].y2 );
 				if ( loc.x > this.activeBlocks[i].x1 && loc.x < this.activeBlocks[i].x2 &&
-					loc.y > this.activeBlocks[i].y1 && loc.y < this.activeBlocks[i].y2 ) {
-					
+					loc.y > this.activeBlocks[i].y1 && loc.y < this.activeBlocks[i].y2 ) {					
 					console.log( "Selected block " + this.activeBlocks[i].blockelement + " " + this.activeBlocks[i].blocktype );
-					// TODO push info to board controller
 					this.addingElement = { element: this.activeBlocks[i].blockelement, type: this.activeBlocks[i].blocktype };
+					this.orientation = 0;
+					break;
 				}
 			}
 		}
+	}
+	
+	this.draftBlock = function( x, y ) {
+		if ( this.boardState ) {
+			this.ctx.putImageData( this.boardState, this.boardStartX, this.boardStartY );
+		}
+		// Save current board so that we can draw over it
+		this.boardState = this.ctx.getImageData( this.boardStartX, this.boardStartY, 
+			this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize 
+			);
+		
+		// Draw block baesed on type and element
+		this.drawBlockOnBoard( x, y );
+		
 	}
 	
 	this.doMouseMove = function( event ) {
@@ -278,27 +314,27 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			if ( boardLoc.x != this.lastLoc.x || boardLoc.y != this.lastLoc.y ) {
 				//console.log("Movement on The Board, coords: " + boardLoc.x + "," + boardLoc.y 
 				//	+ "/" + this.lastLoc.x + "," + this.lastLoc.y );
-
-				if ( this.boardState ) {
-					this.ctx.putImageData( this.boardState, this.boardStartX, this.boardStartY );
-				}
-				// Save current board so that we can draw over it
-				this.boardState = this.ctx.getImageData( this.boardStartX, this.boardStartY, 
-					this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize 
-					);
 				
-				// Draw block baesed on type and element
-				this.drawBlockOnBoard( boardLoc.x, boardLoc.y );
+				this.draftBlock( boardLoc.x, boardLoc.y );
 				
 				// Save current location
 				this.lastLoc = boardLoc;
 			}
 		}
 	}
-	
+		
 	this.doKeyDown = function( event ) {
 		console.log( "key event: " + event.keyCode );
 		// TODO route to controller to handle block orientation
+		if ( event.keyCode == 65 ) {
+			this.orientation++;
+		} else if ( event.keyCode = 68 ) {
+			this.orientation--;
+		}
+		this.orientation = this.orientation < 0 ? this.orientation += 4 : this.orientation;
+		this.orientation = this.orientation >= 4 ? this.orientation -= 4 : this.orientation;
+		console.log( this.orientation );
+		this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 	}
 	
 }

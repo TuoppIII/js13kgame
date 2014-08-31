@@ -8,10 +8,16 @@ function MapController( boardModel ) {
 		console.log( "addElement: " + x + "," + y + "/" + (this.board.activeBoard[x][y]));
 		this.board.activeBoard[x][y] = element;
 	}
+
+	this.addBlockToModel = function( element, x1, y1, x2, y2, x3, y3, x4, y4 )  {
+		this.board.activeBoard[x1][y1] = element;
+		this.board.activeBoard[x2][y2] = element;
+		this.board.activeBoard[x3][y3] = element;
+		this.board.activeBoard[x4][y4] = element;
+	}
 	
-	
-	this.addBlock = function(  element, type, x, y )  {
-		console.log( "adding block: ", element, type, x, y );
+	this.addBlock = function(  element, type, x, y, orientation)  {
+		console.log( "adding block: ", element, type, x, y, orientation );
 		switch ( type ) {
 			case 's':
 				// TODO
@@ -23,7 +29,17 @@ function MapController( boardModel ) {
 				this.board.activeBoard[x+1][y+1] = element;
 				break;
 			case 'l':
-				// TODO
+				switch ( orientation ) {
+					case 0:
+						this.addBlockToModel( element, x, y, x + 1, y, x + 2, y, x, y + 1 );
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+				}
 				break;
 			case 't':
 				// TODO
