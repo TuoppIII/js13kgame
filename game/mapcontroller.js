@@ -20,13 +20,14 @@ function MapController( boardModel ) {
 		console.log( "adding block: ", element, type, x, y, orientation );
 		switch ( type ) {
 			case 's':
-				// TODO
+				if ( orientation == 0 || orientation == 2 ) {
+					this.addBlockToModel( element, x, y, x + 1, y, x + 1, y + 1, x + 2, y + 1 );
+				} else {
+					this.addBlockToModel( element, x + 1, y, x, y + 1, x + 1, y + 1, x, y + 2 );
+				}
 				break;
 			case 'sq':
-				this.board.activeBoard[x][y] = element;
-				this.board.activeBoard[x+1][y] = element;
-				this.board.activeBoard[x][y+1] = element;
-				this.board.activeBoard[x+1][y+1] = element;
+				this.addBlockToModel( element, x, y, x + 1, y, x , y  + 1, x + 1, y + 1 );
 				break;
 			case 'l':
 				switch ( orientation ) {
@@ -34,18 +35,39 @@ function MapController( boardModel ) {
 						this.addBlockToModel( element, x, y, x + 1, y, x + 2, y, x, y + 1 );
 						break;
 					case 1:
+						this.addBlockToModel( element, x, y, x + 1, y, x + 1, y + 1, x + 1, y + 2 );
 						break;
 					case 2:
+						this.addBlockToModel( element, x, y + 1, x + 1, y + 1, x + 2, y + 1, x + 2, y );
 						break;
 					case 3:
+						this.addBlockToModel( element, x, y, x, y + 1, x, y + 2, x + 1, y + 2 );
 						break;
 				}
+				// TODO Flip
 				break;
 			case 't':
-				// TODO
+				if ( orientation == 0 || orientation == 2 ) {
+					if (  orientation == 0 ) {
+						this.addBlockToModel( element, x, y, x + 1, y, x + 2, y, x + 1, y + 1 );
+					} else {
+						this.addBlockToModel( element, x, y + 1, x + 1, y + 1, x + 2, y + 1, x + 1, y );
+					}
+				} else {
+					if ( orientation == 1 ) {
+						this.addBlockToModel( element, x + 1, y, x + 1, y + 1, x + 1, y + 2, x, y + 1 );
+					} else {
+						this.addBlockToModel( element, x, y, x, y + 1, x, y + 2, x + 1, y + 1 );
+					}
+				}
 				break;
 			case 'i':
-				// TODO
+				if ( this.orientation == 0 || this.orientation == 2 ) {
+					this.addBlockToModel( element, x, y, x + 1, y, x + 2, y, x + 3, y );
+				} else {
+					this.addBlockToModel( element, x, y, x , y + 1, x, y + 2, x, y + 3 );
+				}
+
 				break;
 		}
 		

@@ -202,7 +202,16 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawBlockOnBoard = function( x, y ) {
 		switch ( this.addingElement.type ) {
 			case 's':
-				// TODO
+				if ( this.orientation == 0 || this.orientation == 2 ) {
+					x = x > this.colCount - 3 ? this.colCount - 3 : x;
+					y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
+					this.drawBlockShape( x, y, x + 1, y, x + 1, y + 1, x + 2, y + 1 );
+				} else {
+					x = x > this.colCount - 2 ? this.colCount - 2 : x;
+					y = y > this.rowCount - 3 ? this.rowCount - 3 : y;
+					this.drawBlockShape( x + 1, y, x, y + 1, x + 1, y + 1, x, y + 2 );
+				}
+				// TODO Flip, or use left-over orientations?
 				break;
 			case 'sq':
 				x = x > this.colCount - 2 ? this.colCount - 2 : x;
@@ -227,12 +236,37 @@ function GraphEngine( canvas, boardModel, boardController ) {
 						this.drawBlockShape( x, y, x, y + 1, x, y + 2, x + 1, y + 2 );
 					}
 				}
+				// TODO flip
 				break;
 			case 't':
-				// TODO
+				if ( this.orientation == 0 || this.orientation == 2 ) {
+					x = x > this.colCount - 3 ? this.colCount - 3 : x;
+					y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
+					if ( this.orientation == 0 ) {
+						this.drawBlockShape( x, y, x + 1, y, x + 2, y, x + 1, y + 1 );
+					} else {
+						this.drawBlockShape( x, y + 1, x + 1, y + 1, x + 2, y + 1, x + 1, y );
+					}
+				} else {
+					x = x > this.colCount - 2 ? this.colCount - 2 : x;
+					y = y > this.rowCount - 3 ? this.rowCount - 3 : y;
+					if ( this.orientation == 1 ) {
+						this.drawBlockShape( x + 1, y, x + 1, y + 1, x + 1, y + 2, x, y + 1 );
+					} else {
+						this.drawBlockShape( x, y, x, y + 1, x, y + 2, x + 1, y + 1 );
+					}
+				}
 				break;
 			case 'i':
-				// TODO
+				if ( this.orientation == 0 || this.orientation == 2 ) {
+					x = x > this.colCount - 4 ? this.colCount - 4 : x;
+					y = y > this.rowCount - 1 ? this.rowCount - 1 : y;
+					this.drawBlockShape( x, y, x + 1, y, x + 2, y, x + 3, y );
+				} else {
+					x = x > this.colCount - 1 ? this.colCount - 1 : x;
+					y = y > this.rowCount - 4 ? this.rowCount - 4 : y;
+					this.drawBlockShape( x, y, x , y + 1, x, y + 2, x, y + 3 );
+				}
 				break;						
 			default:
 				break;
@@ -328,7 +362,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		// TODO route to controller to handle block orientation
 		if ( event.keyCode == 65 ) {
 			this.orientation++;
-		} else if ( event.keyCode = 68 ) {
+		} else if ( event.keyCode == 68 ) {
 			this.orientation--;
 		}
 		this.orientation = this.orientation < 0 ? this.orientation += 4 : this.orientation;
