@@ -4,7 +4,7 @@
 
 // Board model
 var map = new MapModel( );
-map.init( 100 );
+map.init( 2 );
 
 //var board = new MockupModel( );
 
