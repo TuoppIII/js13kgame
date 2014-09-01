@@ -301,11 +301,12 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			
 			if ( this.addingElement ) {
 				// Draw element to board controller
-				this.controller.addBlock( this.addingElement.element, this.addingElement.type, this.activeBlockX, this.activeBlockY, this.orientation ); // TODO Orientation
-
-				this.boardState = false;
-				this.addingElement = false;
-				this.draw();
+				if ( this.controller.addBlock( this.addingElement.element, this.addingElement.type, this.activeBlockX, this.activeBlockY, this.orientation ) ) // TODO Orientation
+				{
+					this.boardState = false;
+					this.addingElement = false;
+					this.draw();
+				}
 			}
 			
 		} else {
