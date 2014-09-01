@@ -9,12 +9,17 @@ function MapController( boardModel ) {
 		this.board.activeBoard[x][y] = element;
 	}
 
+	this.checkValid = function ( x, y ) {
+		return ( this.board.activeBoard[x][y] === undefined ||
+				this.board.activeBoard[x][y] == "optional");
+	}
+	
 	this.addBlockToModel = function( element, x1, y1, x2, y2, x3, y3, x4, y4 )  {
 		// Check that block can be placed 
-		if (  this.board.activeBoard[x1][y1] === undefined &&
-			this.board.activeBoard[x2][y2] === undefined &&
-			this.board.activeBoard[x3][y3] === undefined &&
-			this.board.activeBoard[x4][y4] === undefined ) {
+		if (  this.checkValid(x1, y1)  &&
+			this.checkValid(x2, y2)  &&
+			this.checkValid(x3, y3) &&
+			this.checkValid(x4, y4) ) {
 			this.board.activeBoard[x1][y1] = element;
 			this.board.activeBoard[x2][y2] = element;
 			this.board.activeBoard[x3][y3] = element;
@@ -24,8 +29,8 @@ function MapController( boardModel ) {
 		return false;
 	}
 	
-	this.addBlock = function(  element, type, x, y, orientation)  {
-		console.log( "adding block: ", element, type, x, y, orientation );
+	this.addBlock = function(  element, type, x, y, orientation, flipped )  {
+		console.log( "adding block: ", element, type, x, y, orientation, flipped );
 		var result = false;
 		
 		switch ( type ) {
@@ -40,21 +45,37 @@ function MapController( boardModel ) {
 				result = this.addBlockToModel( element, x, y, x + 1, y, x , y  + 1, x + 1, y + 1 );
 				break;
 			case 'l':
-				switch ( orientation ) {
-					case 0:
-						result = this.addBlockToModel( element, x, y, x + 1, y, x + 2, y, x, y + 1 );
-						break;
-					case 1:
-						result = this.addBlockToModel( element, x, y, x + 1, y, x + 1, y + 1, x + 1, y + 2 );
-						break;
-					case 2:
-						result = this.addBlockToModel( element, x, y + 1, x + 1, y + 1, x + 2, y + 1, x + 2, y );
-						break;
-					case 3:
-						result = this.addBlockToModel( element, x, y, x, y + 1, x, y + 2, x + 1, y + 2 );
-						break;
+				if ( !flipped ) {
+					switch ( orientation ) {
+						case 0:
+							result = this.addBlockToModel( element, x, y, x + 1, y, x + 2, y, x, y + 1 );
+							break;
+						case 1:
+							result = this.addBlockToModel( element, x, y, x + 1, y, x + 1, y + 1, x + 1, y + 2 );
+							break;
+						case 2:
+							result = this.addBlockToModel( element, x, y + 1, x + 1, y + 1, x + 2, y + 1, x + 2, y );
+							break;
+						case 3:
+							result = this.addBlockToModel( element, x, y, x, y + 1, x, y + 2, x + 1, y + 2 );
+							break;
+					}
+				} else {
+					if ( orientation == 0 || orientation == 2 ) {
+						if ( orientation == 0 ) {
+							console.log( "Hep" );
+							result = this.addBlockToModel(  element, x, y, x, y + 1, x + 1, y + 1, x + 2, y + 1 );
+						} else {
+							result = this.addBlockToModel(  element, x, y, x + 1, y, x + 2, y, x + 2, y + 1 );
+						}
+					} else {
+						if ( orientation == 1 ) {
+							result = this.addBlockToModel(  element, x, y + 2, x + 1, y, x + 1, y + 1, x + 1, y + 2 );
+						} else {
+							result = this.addBlockToModel(  element, x, y, x + 1, y, x, y + 1, x, y + 2 );
+						}
+					}					
 				}
-				// TODO Flip
 				break;
 			case 't':
 				if ( orientation == 0 || orientation == 2 ) {
