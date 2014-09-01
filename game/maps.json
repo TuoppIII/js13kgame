@@ -55,7 +55,7 @@ jsonstr = [
   "id": 100,"name": "Tutorial lvl 1","size": { "x": 10, "y": 10},
   "special_squares":{},
   "blocks":{
-	"earth": { "s": 0, "sq": 1, "t": 0, "l": 2, "i": 0 }
+	"earth": { "s": 1, "sq": 1, "t": 1, "l": 2, "i": 1 }
   }
 },
 ];
