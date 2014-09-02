@@ -9,17 +9,35 @@ function MapController( boardModel ) {
 		this.board.activeBoard[x][y] = element;
 	}
 
-	this.checkValid = function ( x, y ) {
-		return ( this.board.activeBoard[x][y] === undefined ||
-				this.board.activeBoard[x][y] == "optional");
+	this.checkValid = function ( x, y, element ) {
+		square_type = this.board.activeBoard[x][y];
+		//block elements have b as first character. Need to be removed before comparison.
+		return ( square_type === undefined || square_type == "optional" || square_type == element.substr(1));
+	}
+
+	this.checkSuccess = function ( ){
+		var x_max = this.board.size.x;
+		var y_max = this.board.size.y;
+		var elements = ["fire","water","air","earth"];
+		var success = true;
+
+		for ( y = 0; y < y_max; y++ ){
+			for ( x = 0; x < x_max; x++ ){
+				var square_type = this.board.activeBoard[x][y];
+				if (square_type === undefined || elements.indexOf(square_type) > -1 ){
+					success = false;
+				}
+			}
+		}
+		return success;
 	}
 	
 	this.addBlockToModel = function( element, x1, y1, x2, y2, x3, y3, x4, y4 )  {
 		// Check that block can be placed 
-		if (  this.checkValid(x1, y1)  &&
-			this.checkValid(x2, y2)  &&
-			this.checkValid(x3, y3) &&
-			this.checkValid(x4, y4) ) {
+		if (  this.checkValid(x1, y1, element)  &&
+			this.checkValid(x2, y2, element)  &&
+			this.checkValid(x3, y3, element) &&
+			this.checkValid(x4, y4, element) ) {
 			this.board.activeBoard[x1][y1] = element;
 			this.board.activeBoard[x2][y2] = element;
 			this.board.activeBoard[x3][y3] = element;

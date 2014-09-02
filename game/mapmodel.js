@@ -2,6 +2,7 @@
 function MapModel( canvas ) {
 	
 	var lookup = {};
+	this.pointsMultiplier = 0;
 	
 	// Initialization function
 	this.init = function( id ) {
@@ -38,6 +39,7 @@ function MapModel( canvas ) {
 					for(y = yArr[ 0 ]; y <= yArr[ 1 ]; y++){
 						console.log( "position: " + x + "/" + y + "/" + element );
 						this.activeBoard[ x ][ y ] = element;
+						this.countMultiplier(element);
 					}
 				}
 				else if(yArr[ 0 ] == yArr[ 1 ]){
@@ -45,6 +47,7 @@ function MapModel( canvas ) {
 					for(x = xArr[ 0 ]; x <= xArr[ 1 ]; x++){
 						console.log( "position: " + x + "/" + y + "/" + element );
 						this.activeBoard[ x ][ y ] = element;
+						this.countMultiplier(element);
 					}
 				}
 				else{
@@ -52,11 +55,20 @@ function MapModel( canvas ) {
 						for(y = yArr[ 0 ]; y < yArr[ 1 ]; y++){
 							console.log( "position: " + x + "/" + y + "/" + element );
 							this.activeBoard[ x ][ y ] = element;
+							this.countMultiplier(element);
 						}
 					}
 				}
 			}
 		}
 	}
-	
+
+	this.countMultiplier = function( element ) {
+		if(element == 'optional'){
+			this.pointsMultiplier--;
+		}
+		else{
+			this.pointsMultiplier++;
+		}
+	}
 }
