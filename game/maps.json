@@ -36,7 +36,7 @@ jsonstr = [
 		"bearth": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 }
    }
 },
-{  
+{
 	"id": 5,"name": "Tutorial lvl 5","size": { "x": 4, "y": 5},
 	"special_squares":{
 		"fire": ["0,0,3,0"],
@@ -52,16 +52,11 @@ jsonstr = [
 	}
 },
 {
-	"id": 6,"name": "test","size": { "x": 1, "y": 7},
-	"special_squares":{
-		"fire": ["0,0"],
-		"air": ["0,1"],
-		"water": ["0,2"],
-		"earth": ["0,3"],
-		"blank": ["0,4"],
-		"optional": ["0,5"],
-		"disabled": ["0,6"]
-	},
+	"id": 6,"name": "Initiation","size": { "x": 10, "y": 6},
+	"special_squares":{},
+	"blocks": {
+		"bearth": { "s": 2, "sq": 4, "t": 2, "l": 7, "i": 0 }
+	}
 },
 {
 	"id": 100,"name": "Tutorial lvl 1","size": { "x": 10, "y": 10},

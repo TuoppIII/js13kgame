@@ -443,10 +443,12 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	}
 
 	this.calculatePoints = function( ) {
-		var multiplier = 1 + (this.board.pointsMultiplier/100);
 
-		var points = document.getElementById("points");
-		console.log("multiplier: "+multiplier+" millisLeft: "+this.millisLeft)
-		points.innerHTML = "You got " + parseInt((this.millisLeft / 10) * multiplier) + " points!"
+		var points = 0;
+		if (this.millisLeft > 0){
+			var multiplier = 1 + (this.board.pointsMultiplier/100);
+			points = parseInt((this.millisLeft / 10) * multiplier)
+		}
+		document.getElementById("points").innerHTML = "You got " + points + " points!"
 	}
 }
