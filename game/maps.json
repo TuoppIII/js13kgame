@@ -3,7 +3,7 @@ jsonstr = [
 	"id": 1,"name": "Tutorial lvl 1","size": { "x": 2, "y": 5},
 	"special_squares":{},
 	"blocks":{
-		"bearth": { "s": 0, "sq": 0, "t": 0, "l": 2, "i": 0 }
+		"b_earth": { "s": 0, "sq": 0, "t": 0, "l": 2, "i": 0 }
 	}
 },
 {
@@ -14,7 +14,7 @@ jsonstr = [
 		"disabled": ["1,4,3,4"]
 	},
 	"blocks": {
-		"bearth": { "s": 0, "sq": 2, "t": 0, "l": 2, "i": 0 }
+		"b_earth": { "s": 0, "sq": 2, "t": 0, "l": 2, "i": 0 }
 	}
 },
 {
@@ -23,17 +23,17 @@ jsonstr = [
 		"optional": ["2,4"]
 	},
 	"blocks": {
-		"bearth": { "s": 2, "sq": 1, "t": 2, "l": 1, "i": 0 }
+		"b_earth": { "s": 2, "sq": 1, "t": 2, "l": 1, "i": 0 }
 	}
 },
 {
 	"id": 4,"name": "Tutorial lvl 4","size": { "x": 4, "y": 5},
 	"special_squares":{},
 	"blocks": {
-		"bfire": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
-		"bair": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 2 },
-		"bwater": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
-		"bearth": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 }
+		"b_fire": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
+		"b_air": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 2 },
+		"b_water": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
+		"b_earth": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 }
    }
 },
 {
@@ -45,24 +45,24 @@ jsonstr = [
 		"earth": ["0,4,3,4"]
 	},
 	"blocks": {
-		"bfire": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
-		"bair": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 2 },
-		"bwater": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
-		"bearth": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 }
+		"b_fire": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
+		"b_air": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 2 },
+		"b_water": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
+		"b_earth": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 }
 	}
 },
 {
 	"id": 6,"name": "Initiation","size": { "x": 10, "y": 6},
 	"special_squares":{},
 	"blocks": {
-		"bearth": { "s": 2, "sq": 4, "t": 2, "l": 7, "i": 0 }
+		"b_earth": { "s": 2, "sq": 4, "t": 2, "l": 7, "i": 0 }
 	}
 },
 {
 	"id": 100,"name": "Tutorial lvl 1","size": { "x": 10, "y": 10},
 	"special_squares":{},
 	"blocks":{
-		"bearth": { "s": 1, "sq": 1, "t": 1, "l": 2, "i": 1 }
+		"b_earth": { "s": 1, "sq": 1, "t": 1, "l": 2, "i": 1 }
 	}
 },
 ];

@@ -6,15 +6,18 @@
     <title>Little element game</title>
   </head>
   <body>
-    <h1>Element game</h1>
     <table style="border:1px solid #000000;">
 	<tr>
-	<td align="center"><p id="countdown"></p></td>
+	<td colspan="3" align="center"><h1>Little element game</h1></td>
+	</tr>
+	<tr>
+	<td><p id="countdown"></p></td>
+	<td align="center"><h3 id="success"></h3></td>
 	<td><p id="points"></p></td>
 	</tr>
 	<tr>
-	<td>
-            <canvas id="testCanvas" width="500" height="400" style="float:left;" tabindex='1'>   
+	<td colspan="2" align="right">
+            <canvas id="testCanvas" width="500" height="250" style="float:left;" tabindex='1'>   
             </canvas>
 	</td>
 	<td>
@@ -44,18 +47,14 @@
 			<td>Blank: Must be left empty</td>
 		</tr>
 		<tr>
-			<td><img src="./images/disabled.png" alt="disabled"></td>
-			<td>Disabled: Not in use</td>
-		</tr>
-		<tr>
-			<td><b>w,s,a,d</b></td>
+			<td><b>a,s,d</b></td>
 			<td>Rotate block</td>
 		</tr>
 	</table>
 	</td>
 	</tr>
 	<tr>
-	<td><h1 id="success"></h1></td>
+	<td colspan="3" align="center"><b id="feedback"></b></td>
 	</tr>
 	</table>
 	<script src="maps.json"></script>

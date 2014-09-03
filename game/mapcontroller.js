@@ -12,7 +12,21 @@ function MapController( boardModel ) {
 	this.checkValid = function ( x, y, element ) {
 		square_type = this.board.activeBoard[x][y];
 		//block elements have b as first character. Need to be removed before comparison.
-		return ( square_type === undefined || square_type == "optional" || square_type == element.substr(1));
+		if( square_type === undefined || square_type == "optional" || square_type == element.substr(2)){
+			return true;
+		}
+		else{
+			if(square_type.substr(0,2) == "b_"){
+				graph.printFeedBack("Can't put a block on top of another block!");
+			}
+			else if(square_type == "blank"){
+				graph.printFeedBack("Blank squares must be left empty!");
+			}
+			else{
+				graph.printFeedBack("Block must be completely inside game area!");
+			}
+			return false;
+		}
 	}
 
 	this.checkSuccess = function ( ){

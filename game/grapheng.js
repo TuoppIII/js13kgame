@@ -102,19 +102,19 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		switch ( element ) {
 			// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
 			// TODO Colors / images from ElementModel
-			case 'bfire':
+			case 'b_fire':
 			case 'fire':
 				this.ctx.fillStyle = "#FF4500";
 				break;
-			case 'bair':
+			case 'b_air':
 			case 'air':
 				this.ctx.fillStyle = "#00FFFF";
 				break;
-			case 'bwater':
+			case 'b_water':
 			case 'water':
 				this.ctx.fillStyle = "#0000FF";
 				break;
-			case 'bearth':
+			case 'b_earth':
 			case 'earth':
 				this.ctx.fillStyle = "#37E21D";
 				break;
@@ -318,6 +318,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 
 	this.doMouseClick = function( event ) {
 		// TODO route event forward based on where it had happened
+		this.printFeedBack("");
 		var bbox = this.c.getBoundingClientRect();
 		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
 				y: Math.floor( event.clientY - bbox.top  * (this.c.height / bbox.height) )
@@ -450,5 +451,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			points = parseInt((this.millisLeft / 10) * multiplier)
 		}
 		document.getElementById("points").innerHTML = "You got " + points + " points!"
+	}
+	
+	this.printFeedBack = function( msg ) {
+			document.getElementById("feedback").innerHTML = msg;
 	}
 }
