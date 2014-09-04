@@ -37,7 +37,7 @@ function MapModel( canvas ) {
 				if(xArr[ 0 ] == xArr[ 1 ]){
 					x = xArr[0];
 					for(y = yArr[ 0 ]; y <= yArr[ 1 ]; y++){
-						console.log( "position: " + x + "/" + y + "/" + element );
+						//console.log( "position: " + x + "/" + y + "/" + element );
 						this.activeBoard[ x ][ y ] = element;
 						this.countMultiplier(element);
 					}
@@ -45,7 +45,7 @@ function MapModel( canvas ) {
 				else if(yArr[ 0 ] == yArr[ 1 ]){
 					y = yArr[0];
 					for(x = xArr[ 0 ]; x <= xArr[ 1 ]; x++){
-						console.log( "position: " + x + "/" + y + "/" + element );
+						//console.log( "position: " + x + "/" + y + "/" + element );
 						this.activeBoard[ x ][ y ] = element;
 						this.countMultiplier(element);
 					}
@@ -53,7 +53,7 @@ function MapModel( canvas ) {
 				else{
 					for(x = xArr[ 0 ]; x <= xArr[ 1 ] ; x++){
 						for(y = yArr[ 0 ]; y < yArr[ 1 ]; y++){
-							console.log( "position: " + x + "/" + y + "/" + element );
+							//console.log( "position: " + x + "/" + y + "/" + element );
 							this.activeBoard[ x ][ y ] = element;
 							this.countMultiplier(element);
 						}
