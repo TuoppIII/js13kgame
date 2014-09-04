@@ -9,49 +9,17 @@ function MapController( boardModel ) {
 		this.board.activeBoard[x][y] = element;
 	}
 
-	this.checkValid = function ( x, y, element ) {
-		square_type = this.board.activeBoard[x][y];
-		//block elements have b as first character. Need to be removed before comparison.
-		if( square_type === undefined || square_type == "optional" || square_type == element.substr(2)){
-			return true;
-		}
-		else{
-			if(square_type.substr(0,2) == "b_"){
-				graph.printFeedBack("Can't put a block on top of another block!");
-			}
-			else if(square_type == "blank"){
-				graph.printFeedBack("Blank squares must be left empty!");
-			}
-			else{
-				graph.printFeedBack("Block must be completely inside game area!");
-			}
-			return false;
-		}
-	}
-
-	this.checkSuccess = function ( ){
-		var x_max = this.board.size.x;
-		var y_max = this.board.size.y;
-		var elements = ["fire","water","air","earth"];
-		var success = true;
-
-		for ( y = 0; y < y_max; y++ ){
-			for ( x = 0; x < x_max; x++ ){
-				var square_type = this.board.activeBoard[x][y];
-				if (square_type === undefined || elements.indexOf(square_type) > -1 ){
-					success = false;
-				}
-			}
-		}
-		return success;
+	this.checkValid = function ( x, y ) {
+		return ( this.board.activeBoard[x][y] === undefined ||
+				this.board.activeBoard[x][y] == "optional");
 	}
 	
 	this.addBlockToModel = function( element, x1, y1, x2, y2, x3, y3, x4, y4 )  {
 		// Check that block can be placed 
-		if (  this.checkValid(x1, y1, element)  &&
-			this.checkValid(x2, y2, element)  &&
-			this.checkValid(x3, y3, element) &&
-			this.checkValid(x4, y4, element) ) {
+		if (  this.checkValid(x1, y1)  &&
+			this.checkValid(x2, y2)  &&
+			this.checkValid(x3, y3) &&
+			this.checkValid(x4, y4) ) {
 			this.board.activeBoard[x1][y1] = element;
 			this.board.activeBoard[x2][y2] = element;
 			this.board.activeBoard[x3][y3] = element;
@@ -67,10 +35,18 @@ function MapController( boardModel ) {
 		
 		switch ( type ) {
 			case 's':
-				if ( orientation == 0 || orientation == 2 ) {
-					result = this.addBlockToModel( element, x, y, x + 1, y, x + 1, y + 1, x + 2, y + 1 );
+				if ( !flipped ) {
+					if ( orientation == 0 || orientation == 2 ) {
+						result = this.addBlockToModel( element, x, y, x + 1, y, x + 1, y + 1, x + 2, y + 1 );
+					} else {
+						result = this.addBlockToModel( element, x + 1, y, x, y + 1, x + 1, y + 1, x, y + 2 );
+					}
 				} else {
-					result = this.addBlockToModel( element, x + 1, y, x, y + 1, x + 1, y + 1, x, y + 2 );
+					if ( orientation == 0 || orientation == 2 ) {
+						result = this.addBlockToModel( element, x, y + 1, x + 1, y, x + 1, y + 1, x + 2, y );
+					} else {
+						result = this.addBlockToModel( element, x, y, x, y + 1, x + 1, y + 1, x + 1, y + 2 );
+					}
 				}
 				break;
 			case 'sq':
@@ -125,12 +101,11 @@ function MapController( boardModel ) {
 				}
 				break;
 			case 'i':
-				if ( this.orientation == 0 || this.orientation == 2 ) {
+				if ( orientation == 0 || orientation == 2 ) {
 					result = this.addBlockToModel( element, x, y, x + 1, y, x + 2, y, x + 3, y );
 				} else {
 					result = this.addBlockToModel( element, x, y, x , y + 1, x, y + 2, x, y + 3 );
 				}
-
 				break;
 		}
 		

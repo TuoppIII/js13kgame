@@ -27,22 +27,15 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.lastLoc = { x:0, y:0 };
 	this.orientation = 0;
 	this.flipped = false;
+
 	
 	this.activeBlocks = [];
 	
-	this.timerOn = false;
-	this.intervalId;
-	//for points calculation purposes
-	this.millisLeft;
-
 	// Initialization function
 	this.init = function() {
 		this.c.addEventListener( "click", this.doMouseClick.bind( this ) );
 		this.c.addEventListener( "mousemove", this.doMouseMove.bind( this ) );
 		window.addEventListener( "keydown", this.doKeyDown.bind( this ), false );
-
-		var seconds_left = this.rowCount * this.colCount;
-		document.getElementById("countdown").innerHTML = parseInt(seconds_left / 60) + "m, " + parseInt(seconds_left % 60) + "s";  ;
 	};
 	
 	// Draws current state of the game
@@ -102,19 +95,15 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		switch ( element ) {
 			// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
 			// TODO Colors / images from ElementModel
-			case 'b_fire':
 			case 'fire':
 				this.ctx.fillStyle = "#FF4500";
 				break;
-			case 'b_air':
 			case 'air':
 				this.ctx.fillStyle = "#00FFFF";
 				break;
-			case 'b_water':
 			case 'water':
 				this.ctx.fillStyle = "#0000FF";
 				break;
-			case 'b_earth':
 			case 'earth':
 				this.ctx.fillStyle = "#37E21D";
 				break;
@@ -214,16 +203,27 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawBlockOnBoard = function( x, y ) {
 		switch ( this.addingElement.type ) {
 			case 's':
-				if ( this.orientation == 0 || this.orientation == 2 ) {
-					x = x > this.colCount - 3 ? this.colCount - 3 : x;
-					y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
-					this.drawBlockShape( x, y, x + 1, y, x + 1, y + 1, x + 2, y + 1 );
+				if ( !this.flipped ) {
+					if ( this.orientation == 0 || this.orientation == 2 ) {
+						x = x > this.colCount - 3 ? this.colCount - 3 : x;
+						y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
+						this.drawBlockShape( x, y, x + 1, y, x + 1, y + 1, x + 2, y + 1 );
+					} else {
+						x = x > this.colCount - 2 ? this.colCount - 2 : x;
+						y = y > this.rowCount - 3 ? this.rowCount - 3 : y;
+						this.drawBlockShape( x + 1, y, x, y + 1, x + 1, y + 1, x, y + 2 );
+					}
 				} else {
-					x = x > this.colCount - 2 ? this.colCount - 2 : x;
-					y = y > this.rowCount - 3 ? this.rowCount - 3 : y;
-					this.drawBlockShape( x + 1, y, x, y + 1, x + 1, y + 1, x, y + 2 );
+					if ( this.orientation == 0 || this.orientation == 2 ) {
+						x = x > this.colCount - 3 ? this.colCount - 3 : x;
+						y = y > this.rowCount - 2 ? this.rowCount - 2 : y;
+						this.drawBlockShape( x, y + 1, x + 1, y, x + 1, y + 1, x + 2, y );
+					} else {
+						x = x > this.colCount - 2 ? this.colCount - 2 : x;			// *_
+						y = y > this.rowCount - 3 ? this.rowCount - 3 : y;			// **
+						this.drawBlockShape( x, y, x, y + 1, x + 1, y + 1, x + 1, y + 2 );	// _*
+					}
 				}
-				// TODO Flip, or use left-over orientations?
 				break;
 			case 'sq':
 				x = x > this.colCount - 2 ? this.colCount - 2 : x;
@@ -318,7 +318,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 
 	this.doMouseClick = function( event ) {
 		// TODO route event forward based on where it had happened
-		this.printFeedBack("");
 		var bbox = this.c.getBoundingClientRect();
 		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
 				y: Math.floor( event.clientY - bbox.top  * (this.c.height / bbox.height) )
@@ -338,11 +337,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 					this.boardState = false;
 					this.addingElement = false;
 					this.draw();
-					if(this.controller.checkSuccess()){
-						clearInterval(this.intervalId);
-						this.calculatePoints();
-						document.getElementById("success").innerHTML = "Success!!";
-					}
 				}
 			}
 			
@@ -356,9 +350,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 					this.addingElement = { element: this.activeBlocks[i].blockelement, type: this.activeBlocks[i].blocktype };
 					this.orientation = 0;
 					this.flipped = false;
-					if(!this.timerRunning()){
-						this.runTimer();
-					}
 					break;
 				}
 			}
@@ -414,46 +405,5 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		console.log( this.orientation, this.flipped );
 		this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 	}
-
-	this.timerRunning = function( ) {
-		return this.timerOn;
-	}
 	
-	this.runTimer = function( ) {
-		//Calculate the available time
-		//+1 because otherwise timer would jump 2s on first interval
-		var availableTime = (this.rowCount * this.colCount + 1) * 1000;
-		// set the date we're counting down to
-		var targetDate = Date.now() + availableTime;
-		// variables for time units
-		var minutes, seconds;
-		// get tag element
-		var countdown = document.getElementById("countdown");
-		this.timerOn = true;
-		this.intervalId = setInterval(function () {
-				var currentDate = Date.now();
-				graph.millisLeft = targetDate - currentDate
-				var secondsLeft = graph.millisLeft / 1000;
-
-				minutes = parseInt(secondsLeft / 60);
-				seconds = parseInt(secondsLeft % 60);
-
-				// format countdown string + set tag value
-				countdown.innerHTML = minutes + "m, " + seconds + "s";  
-		}, 1000);
-	}
-
-	this.calculatePoints = function( ) {
-
-		var points = 0;
-		if (this.millisLeft > 0){
-			var multiplier = 1 + (this.board.pointsMultiplier/100);
-			points = parseInt((this.millisLeft / 10) * multiplier)
-		}
-		document.getElementById("points").innerHTML = "You got " + points + " points!"
-	}
-	
-	this.printFeedBack = function( msg ) {
-			document.getElementById("feedback").innerHTML = msg;
-	}
 }
