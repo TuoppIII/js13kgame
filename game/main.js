@@ -2,7 +2,6 @@
 
 // TODO init model
 var mapid = location.hash.substring(1);
-console.log( mapid );
 
 // Board model
 var map = new MapModel( );
