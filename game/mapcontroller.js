@@ -10,8 +10,20 @@ function MapController( boardModel ) {
 	}
 
 	this.checkValid = function ( x, y ) {
-		return ( this.board.activeBoard[x][y] === undefined ||
-				this.board.activeBoard[x][y] == "optional");
+		if( square_type === undefined || square_type == "optional" || square_type == element.substr(2)){
+			return true;
+		} else {
+			if(square_type.substr(0,2) == "b_"){
+				graph.printFeedBack("Can't put a block on top of another block!");
+			}
+			else if(square_type == "blank"){
+				graph.printFeedBack("Blank squares must be left empty!");
+			}
+			else{
+				graph.printFeedBack("Block must be completely inside game area!");
+			}
+			return false;
+		}
 	}
 	
 	this.addBlockToModel = function( element, x1, y1, x2, y2, x3, y3, x4, y4 )  {
