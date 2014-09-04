@@ -362,7 +362,14 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				{
 					this.boardState = false;
 					this.addingElement = false;
+					this.lastBlockLoc = undefined;
 					this.draw();
+					if(this.controller.checkSuccess()){
+						clearInterval(this.intervalId);
+						this.calculatePoints();
+						document.getElementById("success").innerHTML = "Success!!";
+					}
+
 				}
 			}
 			
@@ -377,6 +384,10 @@ function GraphEngine( canvas, boardModel, boardController ) {
 					this.addingElement = { element: this.activeBlocks[i].blockelement, type: this.activeBlocks[i].blocktype };
 					this.orientation = 0;
 					this.flipped = false;
+					
+					if(!this.timerRunning()){
+						this.runTimer();
+					}
 					
 					// Draw edges around selected block
 					if ( this.lastBlockLoc === undefined ) {
@@ -446,6 +457,35 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 	}
 
+	
+	this.timerRunning = function( ) {
+		return this.timerOn;
+	}
+	
+	this.runTimer = function( ) {
+		//Calculate the available time
+		//+1 because otherwise timer would jump 2s on first interval
+		var availableTime = (this.rowCount * this.colCount + 1) * 1000;
+		// set the date we're counting down to
+		var targetDate = Date.now() + availableTime;
+		// variables for time units
+		var minutes, seconds;
+		// get tag element
+		var countdown = document.getElementById("countdown");
+		this.timerOn = true;
+		this.intervalId = setInterval(function () {
+				var currentDate = Date.now();
+				graph.millisLeft = targetDate - currentDate
+				var secondsLeft = graph.millisLeft / 1000;
+
+				minutes = parseInt(secondsLeft / 60);
+				seconds = parseInt(secondsLeft % 60);
+
+				// format countdown string + set tag value
+				countdown.innerHTML = minutes + "m, " + seconds + "s";  
+		}, 1000);
+	}
+	
  	this.calculatePoints = function( ) {
 		var points = 0;
 		if (this.millisLeft > 0){
@@ -454,5 +494,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		}
 		document.getElementById("points").innerHTML = "You got " + points + " points!"
  	}
+	
+	this.printFeedBack = function( msg ) {
+			document.getElementById("feedback").innerHTML = msg;
+	}
 	
 }
