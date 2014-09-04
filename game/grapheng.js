@@ -139,8 +139,14 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	this.drawElement = function( element, x, y) {
 		this.setElementFill( element );
-		//console.log( element, x, y );
-		if ( element != 'disabled' ) {
+		console.log( element, x, y );
+		if ( element.substr(0, 2) == "b_") {
+			if ( this.addingElement ) {
+				this.ctx.strokeStyle = "#000000";
+				this.ctx.strokeRect( x, y, this.boardBlockSize, this.boardBlockSize);
+			}
+			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+		} else if ( element != 'disabled' ) {
 			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
 		} else {
 			this.ctx.fillRect( x - 1, y - 1, this.boardCellSize, this.boardCellSize );
