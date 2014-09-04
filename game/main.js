@@ -1,10 +1,16 @@
 // This file is for initializing all other components and kicking games main loop in the action.
 
 // TODO init model
+var mapid = location.hash.substring(1);
+console.log( mapid );
 
 // Board model
 var map = new MapModel( );
-map.init( 2 );
+if ( !isNaN( mapid ) ) {
+	map.init( mapid );
+} else {
+	map.init( 2 );
+}
 
 //var board = new MockupModel( );
 
