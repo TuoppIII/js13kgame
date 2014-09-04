@@ -14,10 +14,10 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.colCount = boardModel.size.x;
 	
 	// Offsets for different game parts
-	this.boardStartX = 200;
-	this.boardStartY = 50;
-	this.boardBlockX = 10;
-	this.boardBlockY = 80;
+	this.boardStartX = 5;
+	this.boardStartY = 30;
+	this.boardBlockX = 200;
+	this.boardBlockY = 40;
 	
 	// defaults for block and cell sizes
 	this.boardBlockSize = 16;
@@ -30,12 +30,20 @@ function GraphEngine( canvas, boardModel, boardController ) {
 
 	
 	this.activeBlocks = [];
+	this.timerOn = false;
+	this.intervalId;
+	//for points calculation purposes
+	this.millisLeft;
 	
 	// Initialization function
 	this.init = function() {
 		this.c.addEventListener( "click", this.doMouseClick.bind( this ) );
 		this.c.addEventListener( "mousemove", this.doMouseMove.bind( this ) );
 		window.addEventListener( "keydown", this.doKeyDown.bind( this ), false );
+		
+		var seconds_left = this.rowCount * this.colCount;
+		document.getElementById("countdown").innerHTML = parseInt(seconds_left / 60) + "m, " + parseInt(seconds_left % 60) + "s";  ;
+
 	};
 	
 	// Draws current state of the game
@@ -44,8 +52,8 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		this.ctx.beginPath();
 		this.ctx.clearRect( 0,0, this.c.width, this.c.height );
 
-		this.boardBlockX = 10;
-		this.boardBlockY = 80;
+		this.boardBlockX = 200;
+		this.boardBlockY = 40;
 		
 		// draw different parts
 		this.drawInfo();
@@ -76,7 +84,10 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawInfo = function() {
 		this.ctx.font = "20px Arial";
 
-		this.ctx.fillText("Available blocks:", 10, 65);	// Does NOT work in Konqueror - valid HTML5 though
+		this.ctx.fillStyle = "#000000";
+		this.ctx.strokeStyle = "#000000";
+		
+		this.ctx.fillText("Available blocks:", this.boardBlockX, this.boardBlockY - 20);	// Does NOT work in Konqueror - valid HTML5 though
 		this.ctx.strokeText( this.board.name, this.boardStartX, this.boardStartY - 10 ); 	// Does NOT work in Konqueror - valid HTML5 though
 	}
 	
@@ -96,19 +107,23 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			// Color codes from: http://www.rapidtables.com/web/color/RGB_Color.htm
 			// TODO Colors / images from ElementModel
 			case 'fire':
+			case 'b_fire':
 				this.ctx.fillStyle = "#FF4500";
 				break;
 			case 'air':
+			case 'b_air':
 				this.ctx.fillStyle = "#00FFFF";
 				break;
 			case 'water':
+			case 'b_water':
 				this.ctx.fillStyle = "#0000FF";
 				break;
 			case 'earth':
+			case 'b_earth':
 				this.ctx.fillStyle = "#37E21D";
 				break;
 			case 'disabled':
-				this.ctx.fillStyle = "#A0A0A0";
+				this.ctx.fillStyle = "#FFFFFF";
 				break;
 			case 'optional':
 				this.ctx.fillStyle = "#ebebeb";
@@ -124,7 +139,12 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	this.drawElement = function( element, x, y) {
 		this.setElementFill( element );
-		this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+		//console.log( element, x, y );
+		if ( element != 'disabled' ) {
+			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+		} else {
+			this.ctx.fillRect( x - 1, y - 1, this.boardCellSize, this.boardCellSize );
+		}
 	}
 	
 	this.drawBoardElement = function( element, x, y) {
@@ -322,7 +342,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
 				y: Math.floor( event.clientY - bbox.top  * (this.c.height / bbox.height) )
 			}; 
-		console.log( "event on coords: " + loc.x + "," + loc.y );
+		//console.log( "event on coords: " + loc.x + "," + loc.y );
 		
 		if ( this.insideBoard( loc.x, loc.y ) ) 
 		{
@@ -341,15 +361,29 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			}
 			
 		} else {
-			// Check if block was selected
+			// Check if block was already selected
 			for ( var i in this.activeBlocks ) {
-				console.log( this.activeBlocks[i].x1, this.activeBlocks[i].y1, this.activeBlocks[i].x2, this.activeBlocks[i].y2 );
-				if ( loc.x > this.activeBlocks[i].x1 && loc.x < this.activeBlocks[i].x2 &&
-					loc.y > this.activeBlocks[i].y1 && loc.y < this.activeBlocks[i].y2 ) {					
-					console.log( "Selected block " + this.activeBlocks[i].blockelement + " " + this.activeBlocks[i].blocktype );
+				var x1 = this.activeBlocks[i].x1, y1 = this.activeBlocks[i].y1, x2 = this.activeBlocks[i].x2, y2 = this.activeBlocks[i].y2;
+				//console.log( x1, y1, x2, y2 );
+				if ( loc.x > x1 && loc.x < x2 &&
+					loc.y > y1 && loc.y < y2 ) {	
+					
 					this.addingElement = { element: this.activeBlocks[i].blockelement, type: this.activeBlocks[i].blocktype };
 					this.orientation = 0;
 					this.flipped = false;
+					
+					// Draw edges around selected block
+					if ( this.lastBlockLoc === undefined ) {
+						console.log( "not found" );
+					} else {
+						this.ctx.putImageData( this.blockState, this.lastBlockLoc.x1 - 1, this.lastBlockLoc.y1 - 1 );
+					}
+					this.blockState = this.ctx.getImageData( x1 - 1, y1 - 1, x2 - x1 + 2, y2 - y1 + 2 );
+					this.ctx.strokeStyle = "#000000";
+					this.ctx.strokeRect( x1, y1, x2 - x1, y2 - y1 );
+					this.ctx.strokeStyle = "#FFFFFF";
+					
+					this.lastBlockLoc = { x1: x1, y1: y1 };
 					break;
 				}
 			}
@@ -405,5 +439,14 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		console.log( this.orientation, this.flipped );
 		this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 	}
+
+ 	this.calculatePoints = function( ) {
+		var points = 0;
+		if (this.millisLeft > 0){
+			var multiplier = 1 + (this.board.pointsMultiplier/100);
+			points = parseInt((this.millisLeft / 10) * multiplier)
+		}
+		document.getElementById("points").innerHTML = "You got " + points + " points!"
+ 	}
 	
 }
