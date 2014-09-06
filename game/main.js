@@ -52,3 +52,12 @@ var selectBtn = document.getElementById("ChangeLevelBtn");
 selectBtn.addEventListener( "click", buttonClickEvent );
 
 
+// Init restart level button
+var buttonReStClickEvent = function( event ) {
+	location.reload(); // ... and reload it
+}
+
+var selectBtn = document.getElementById("RestartLevelBtn");
+selectBtn.addEventListener( "click", buttonReStClickEvent );
+
+
