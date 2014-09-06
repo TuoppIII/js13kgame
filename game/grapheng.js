@@ -57,29 +57,10 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		
 		// draw different parts
 		this.drawInfo();
-		this.drawBoard();
 		this.drawBlocks();
 		this.drawGame();
 	};
 	
-
-	this.drawBoard = function() {
-		this.ctx.strokeStyle = "#909090"; 
-		for ( var i = 0; i < (this.rowCount + 1); i++ ) {
-			this.ctx.moveTo( this.boardStartX, 
-				this.boardStartY + i * this.boardCellSize );
-			this.ctx.lineTo( this.boardStartX + this.colCount * this.boardCellSize, 
-				this.boardStartY + i * this.boardCellSize );
-		}
-
-		for ( var i = 0; i < (this.colCount + 1); i++ ) {
-			this.ctx.moveTo( this.boardStartX + i * this.boardCellSize, 
-				this.boardStartY );
-			this.ctx.lineTo( this.boardStartX + i * this.boardCellSize, 
-				this.boardStartY + this.rowCount * this.boardCellSize );
-		}
-		this.ctx.stroke();
-	}
 	
 	this.drawInfo = function() {
 		this.ctx.font = "20px Arial";
@@ -95,7 +76,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawGame = function() {
 		// Draw current game situation		
 		for( var row in this.board.activeBoard ) {
-			for ( var column in this.board.activeBoard[row] ) {
+			console.log( this.board.activeBoard[row] );
+//			for ( var column in this.board.activeBoard[row] ) {
+			for ( var column = 0; column < this.board.activeBoard[row].length; column++ ) {
 				//console.log( "board cell: " + row + "," + column + "," + this.board.activeBoard[row][column] );
 				this.drawBoardElement( this.board.activeBoard[row][column], row, column );
 			}
@@ -132,28 +115,33 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				this.ctx.fillStyle = "#FFE5CC";
 				break;
 			default:
-				this.ctx.fillStyle = "#A0A0A0";
+				this.ctx.fillStyle = "#909090";
 				break;
 		}
 	}
 	
 	this.drawElement = function( element, x, y) {
-		this.setElementFill( element );
 		//console.log( element, x, y );
-		if ( element.substr(0, 2) == "b_") {
-			if ( this.addingElement ) {
-				this.ctx.strokeStyle = "#000000";
-				this.ctx.strokeRect( x, y, this.boardBlockSize, this.boardBlockSize);
+		if ( element != "disabled" ) {
+			this.ctx.strokeStyle = "#909090";
+			this.ctx.strokeRect( x - 1, y - 1, this.boardBlockSize + 2, this.boardBlockSize + 2 );
+			if ( element === undefined ) {
+			} else {
+				this.setElementFill( element );
+				if ( element.substr(0, 2) == "b_") {
+					if ( this.addingElement ) {
+						this.ctx.strokeStyle = "#404040";
+						this.ctx.strokeRect( x, y, this.boardBlockSize, this.boardBlockSize);
+					}
+					this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+				} else if ( element == 'blank' || element == 'optional' ) {
+					this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
+				} else {
+					this.ctx.strokeStyle = this.ctx.fillStyle;
+					this.ctx.strokeRect( x, y, this.boardBlockSize, this.boardBlockSize);			
+				}
 			}
-			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-		} else if ( element == 'disabled' ) {
-			this.ctx.fillRect( x - 1, y - 1, this.boardCellSize, this.boardCellSize );
-		} else if ( element == 'blank' || element == 'optional' ) {
-			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-		} else {
-			this.ctx.strokeStyle = this.ctx.fillStyle;
-			this.ctx.strokeRect( x, y, this.boardBlockSize, this.boardBlockSize);			
-		}
+		}	
 	}
 	
 	this.drawBoardElement = function( element, x, y) {
