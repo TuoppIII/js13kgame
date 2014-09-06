@@ -1,6 +1,6 @@
 jsonstr = [ 
 {
-	"id": 1,"name": "Tutorial lvl 1","size": { "x": 2, "y": 5},
+	"id": 1,"name": "Tutorial lvl 1","size": { "x": 4, "y": 2},
 	"special_squares":{},
 	"blocks":{
 		"b_earth": { "s": 0, "sq": 0, "t": 0, "l": 2, "i": 0 }
