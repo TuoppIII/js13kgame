@@ -146,10 +146,13 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				this.ctx.strokeRect( x, y, this.boardBlockSize, this.boardBlockSize);
 			}
 			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
-		} else if ( element != 'disabled' ) {
+		} else if ( element == 'disabled' ) {
+			this.ctx.fillRect( x - 1, y - 1, this.boardCellSize, this.boardCellSize );
+		} else if ( element == 'blank' || element == 'optional' ) {
 			this.ctx.fillRect( x, y, this.boardBlockSize, this.boardBlockSize);
 		} else {
-			this.ctx.fillRect( x - 1, y - 1, this.boardCellSize, this.boardCellSize );
+			this.ctx.strokeStyle = this.ctx.fillStyle;
+			this.ctx.strokeRect( x, y, this.boardBlockSize, this.boardBlockSize);			
 		}
 	}
 	
