@@ -41,9 +41,10 @@ graph.draw();
 // Init change level button
 var buttonClickEvent = function( event ) {
 	// Load level based on ChangeLevetLst
-	var selectBox = document.getElementById("ChangeLevelLst");	
+	var selectBox = document.getElementById("ChangeLevelLst");
+	//console.log( location.href.substring(0, location.href.indexOf("#") ) );
 	if ( selectBox.selectedIndex >= 0 ) {
-		location.replace( location.origin + location.pathname + "#" +  selectBox.options[ selectBox.selectedIndex ].value ); // select new level...
+		location.replace( location.href.substring(0, location.href.indexOf("#") ) + "#" +  selectBox.options[ selectBox.selectedIndex ].value ); // select new level...
 		location.reload(); // ... and reload it
 	}
 }
@@ -57,7 +58,16 @@ var buttonReStClickEvent = function( event ) {
 	location.reload(); // ... and reload it
 }
 
-var selectBtn = document.getElementById("RestartLevelBtn");
-selectBtn.addEventListener( "click", buttonReStClickEvent );
+var restartBtn = document.getElementById("RestartLevelBtn");
+restartBtn.addEventListener( "click", buttonReStClickEvent );
 
 
+// Init next button
+var buttonNextClickEvent = function( event ) {
+	//console.log( location.href.substring(0, location.href.indexOf("#") ) + "#" +  (parseInt(map.id) + 1) );
+	location.replace( location.href.substring(0, location.href.indexOf("#") ) + "#" +  (parseInt(map.id) + 1) ); // select new level...
+	location.reload(); // ... and reload it
+}
+
+var nextBtn = document.getElementById("NextLevelBtn");
+nextBtn.addEventListener( "click", buttonNextClickEvent );

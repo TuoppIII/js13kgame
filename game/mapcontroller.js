@@ -42,6 +42,12 @@ function MapController( boardModel ) {
 				}
 			}
 		}
+		
+		if ( success ) {
+			// Show next button
+			var nextBtn = document.getElementById("NextLevelBtn");
+			nextBtn.style.visibility = "visible";
+		}
 		return success;
  	}
 	
