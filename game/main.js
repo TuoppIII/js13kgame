@@ -5,7 +5,7 @@ var mapid = location.hash.substring(1);
 
 // Board model
 var map = new MapModel( );
-if ( !isNaN( mapid ) ) {
+if ( !isNaN( mapid ) && mapid != undefined && mapid != "" ) {
 	map.init( mapid );
 } else {
 	map.init( 2 );
