@@ -123,7 +123,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				this.ctx.fillStyle = "#37E21D";
 				break;
 			case 'disabled':
-				this.ctx.fillStyle = "#FFFFFF";
+				this.ctx.fillStyle = "#000000";
 				break;
 			case 'optional':
 				this.ctx.fillStyle = "#ebebeb";
@@ -139,7 +139,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	this.drawElement = function( element, x, y) {
 		this.setElementFill( element );
-		console.log( element, x, y );
+		//console.log( element, x, y );
 		if ( element.substr(0, 2) == "b_") {
 			if ( this.addingElement ) {
 				this.ctx.strokeStyle = "#000000";
