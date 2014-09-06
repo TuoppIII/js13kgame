@@ -8,20 +8,20 @@
   <body>
     <table style="border:1px solid #000000;">
 	<tr>
-	<td colspan="3" align="center"><h1>Little element game</h1></td>
+	  <td colspan="3" align="center"><h1>Little element game</h1></td>
 	</tr>
 	<tr>
-	<td><p id="countdown"></p></td>
-	<td align="center"><h3 id="success"></h3></td>
-	<td><p id="points"></p></td>
+	  <td><p id="countdown"></p></td>
+	  <td align="center"><h3 id="success"></h3></td>
+	  <td><p id="points"></p></td>
 	</tr>
 	<tr>
-	<td colspan="2" align="right">
+	  <td colspan="2" align="right">
             <canvas id="testCanvas" width="500" height="250" style="float:left;" tabindex='1'>   
             </canvas>
 	</td>
 	<td>
-	<table style="float:left;">
+	  <table style="float:left;">
 		<tr>
 			<td style="border: 1px solid black;" border="1" bgcolor="#FF4500"></td>
 			<td>Fire: Burns earth</td>
@@ -50,13 +50,21 @@
 			<td><b>a,s,d</b></td>
 			<td>Rotate block</td>
 		</tr>
-	</table>
+	  </table>
 	</td>
 	</tr>
 	<tr>
-	<td colspan="3" align="center"><b id="feedback"></b></td>
+	<td colspan="2" align="center"><b id="feedback"></b></td>
+	<td>	
+	  <select id="ChangeLevelLst" size="4" width="200">
+	  </select>
+	  <button id="ChangeLevelBtn" type="button">Select level</button>
+	</td>
 	</tr>
 	</table>
+	
+	
+	<!-- Used scripts below -->
 	<script src="maps.json"></script>
 	<script src="grapheng.js"></script>
 	<script src="mapmodel.js"></script>

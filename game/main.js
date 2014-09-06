@@ -1,6 +1,19 @@
 // This file is for initializing all other components and kicking games main loop in the action.
 
-// TODO init model
+
+// Part of the (non-existing) GameEngine, but placed in main.js
+initSelectBox = function ( ) {
+	var selectBox = document.getElementById("ChangeLevelLst");
+  
+	for (var i = 0, len = jsonstr.length; i < len; i++) {
+		var map = new Option( jsonstr[i].name, jsonstr[i].id );
+		selectBox.options.add( map ); 
+	}
+
+}
+
+
+// Init model
 var mapid = location.hash.substring(1);
 
 // Board model
@@ -8,10 +21,10 @@ var map = new MapModel( );
 if ( !isNaN( mapid ) && mapid != undefined && mapid != "" ) {
 	map.init( mapid );
 } else {
-	map.init( 2 );
+	map.init( 1 );
 }
 
-//var board = new MockupModel( );
+initSelectBox();
 
 // init controller
 var controller = new MapController( map );
@@ -25,5 +38,17 @@ graph.init();
 graph.draw();
 
 
+// Init change level button
+var buttonClickEvent = function( event ) {
+	// Load level based on ChangeLevetLst
+	var selectBox = document.getElementById("ChangeLevelLst");	
+	if ( selectBox.selectedIndex >= 0 ) {
+		location.replace( location.origin + location.pathname + "#" +  selectBox.options[ selectBox.selectedIndex ].value ); // select new level...
+		location.reload(); // ... and reload it
+	}
+}
+
+var selectBtn = document.getElementById("ChangeLevelBtn");
+selectBtn.addEventListener( "click", buttonClickEvent );
 
 
