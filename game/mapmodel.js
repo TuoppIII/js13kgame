@@ -32,8 +32,8 @@ function MapModel( canvas ) {
 		for ( var element in this.specials ) {
 			for ( var block in this.specials[ element ] ) {
 				var position = (this.specials[ element ])[ block ].split(",") ;
-				var xArr = [position[0],position[2] || position[0]].sort();
-				var yArr = [position[1],position[3] || position[1]].sort();
+				var xArr = [position[0],position[2] || position[0]].sort(sortNumber);
+				var yArr = [position[1],position[3] || position[1]].sort(sortNumber);
 				
 				if(xArr[ 0 ] == xArr[ 1 ]){
 					x = xArr[0];
@@ -50,8 +50,8 @@ function MapModel( canvas ) {
 					}
 				}
 				else{
-					for(x = xArr[ 0 ]; x <= xArr[ 1 ] ; x++){
-						for(y = yArr[ 0 ]; y < yArr[ 1 ]; y++){
+					for(x = xArr[ 0 ]; x <= xArr[ 1 ]; x++){
+						for(y = yArr[ 0 ]; y <= yArr[ 1 ]; y++){
 							this.activeBoard[ x ][ y ] = element;
 							this.countMultiplier(element);
 
@@ -62,6 +62,10 @@ function MapModel( canvas ) {
 		}
 	}
 
+	
+	function sortNumber(a,b) {
+		return a - b;
+	}
 	this.countMultiplier = function( element ) {
 		if(element == 'optional'){
 			this.pointsMultiplier--;
