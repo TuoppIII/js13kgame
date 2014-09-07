@@ -42,8 +42,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		window.addEventListener( "keydown", this.doKeyDown.bind( this ), false );
 		
 		var seconds_left = this.rowCount * this.colCount;
-		document.getElementById("countdown").innerHTML = parseInt(seconds_left / 60) + "m, " + parseInt(seconds_left % 60) + "s";  ;
-
+		this.updateTimer(parseInt(seconds_left / 60), parseInt(seconds_left % 60))
 	};
 	
 	// Draws current state of the game
@@ -469,12 +468,13 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				graph.millisLeft = targetDate - currentDate
 				var secondsLeft = graph.millisLeft / 1000;
 
-				minutes = parseInt(secondsLeft / 60);
-				seconds = parseInt(secondsLeft % 60);
-
 				// format countdown string + set tag value
-				countdown.innerHTML = minutes + "m, " + seconds + "s";  
+				graph.updateTimer (parseInt(secondsLeft / 60), parseInt(secondsLeft % 60));  
 		}, 1000);
+	}
+	
+	this.updateTimer = function( minutes, seconds ) {
+		document.getElementById("countdown").innerHTML = minutes + ":" + seconds;
 	}
 	
  	this.calculatePoints = function( ) {
