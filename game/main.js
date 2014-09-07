@@ -64,9 +64,13 @@ restartBtn.addEventListener( "click", buttonReStClickEvent );
 
 // Init next button
 var buttonNextClickEvent = function( event ) {
-	//console.log( location.href.substring(0, location.href.indexOf("#") ) + "#" +  (parseInt(map.id) + 1) );
-	location.replace( location.href.substring(0, location.href.indexOf("#") ) + "#" +  (parseInt(map.id) + 1) ); // select new level...
-	location.reload(); // ... and reload it
+	if(map.lookup[map.id+1] === undefined){
+		graph.printFeedBack("No more levels. Congratulations! You have passed all levels! ")
+	}
+	else{
+		location.replace( location.href.substring(0, location.href.indexOf("#") ) + "#" +  (parseInt(map.id) + 1) ); // select new level...
+		location.reload(); // ... and reload it
+	}
 }
 
 var nextBtn = document.getElementById("NextLevelBtn");

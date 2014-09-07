@@ -76,9 +76,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		// Draw current game situation		
 		for( var row in this.board.activeBoard ) {
 			console.log( this.board.activeBoard[row] );
-//			for ( var column in this.board.activeBoard[row] ) {
 			for ( var column = 0; column < this.board.activeBoard[row].length; column++ ) {
-				//console.log( "board cell: " + row + "," + column + "," + this.board.activeBoard[row][column] );
 				this.drawBoardElement( this.board.activeBoard[row][column], row, column );
 			}
 		}
@@ -120,7 +118,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	}
 	
 	this.drawElement = function( element, x, y) {
-		//console.log( element, x, y );
 		if ( element != "disabled" ) {
 			this.ctx.strokeStyle = "#909090";
 			this.ctx.strokeRect( x - 1, y - 1, this.boardBlockSize + 2, this.boardBlockSize + 2 );
@@ -156,7 +153,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		for ( var element in this.board.blocks ) {
 			this.setElementFill( element );
 			for ( var block in this.board.blocks[element] ) {
-				// console.log("block: " + element + " " + block + " " + this.board.blocks[element][block]);
 				var amount = this.board.blocks[element][block];
 				if ( amount == 0 ) {
 					// Don't draw empty blocks
@@ -337,14 +333,14 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		var bbox = this.c.getBoundingClientRect();
 		var loc = { x: Math.floor( event.clientX - bbox.left * (this.c.width  / bbox.width) ),
 				y: Math.floor( event.clientY - bbox.top  * (this.c.height / bbox.height) )
-			}; 
-		//console.log( "event on coords: " + loc.x + "," + loc.y );
+			};
+
+		graph.printFeedBack("");			
 		
 		if ( this.insideBoard( loc.x, loc.y ) ) 
 		{
 			// Forward clicks to board to board controller
 			var boardLoc = this.boardLoc( loc.x, loc.y );
-			//console.log("event on The Board, coords: " + boardLoc.x + "," + boardLoc.y + "," + this.addingElement);
 			
 			if ( this.addingElement ) {
 				// Draw element to board controller
@@ -367,7 +363,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 			// Check if block was already selected
 			for ( var i in this.activeBlocks ) {
 				var x1 = this.activeBlocks[i].x1, y1 = this.activeBlocks[i].y1, x2 = this.activeBlocks[i].x2, y2 = this.activeBlocks[i].y2;
-				//console.log( x1, y1, x2, y2 );
 				if ( loc.x > x1 && loc.x < x2 &&
 					loc.y > y1 && loc.y < y2 ) {	
 					
@@ -420,8 +415,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		{
 			var boardLoc = this.boardLoc( loc.x, loc.y );
 			if ( boardLoc.x != this.lastLoc.x || boardLoc.y != this.lastLoc.y ) {
-				//console.log("Movement on The Board, coords: " + boardLoc.x + "," + boardLoc.y 
-				//	+ "/" + this.lastLoc.x + "," + this.lastLoc.y );
 				
 				this.draftBlock( boardLoc.x, boardLoc.y );
 				
@@ -468,7 +461,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				graph.millisLeft = targetDate - currentDate
 				var secondsLeft = graph.millisLeft / 1000;
 
-				// format countdown string + set tag value
 				graph.updateTimer (parseInt(secondsLeft / 60), parseInt(secondsLeft % 60));  
 		}, 1000);
 	}

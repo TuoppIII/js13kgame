@@ -21,6 +21,9 @@ function MapController( boardModel ) {
 			else if(square_type == "blank"){
 				graph.printFeedBack("Blank squares must be left empty!");
 			}
+			else if(square_type != element.substr(0,2)){
+				graph.printFeedBack("Cannot put "+ element.substr(2) +" on square requiring "+ square_type +"!");
+			}
 			else{
 				graph.printFeedBack("Block must be completely inside game area!");
 			}
