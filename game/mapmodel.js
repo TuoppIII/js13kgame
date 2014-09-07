@@ -3,6 +3,7 @@ function MapModel( canvas ) {
 	
 	this.lookup = {};
 	this.pointsMultiplier = 0;
+	this.disabled_squares = 0;
 	
 	// Initialization function
 	this.init = function( id ) {
@@ -23,6 +24,7 @@ function MapModel( canvas ) {
 			this.activeBoard[i] = new Array( this.size.y );
 		}
 		this.initBoard();
+		this.countDisabled();
 		
 	}
 	
@@ -32,7 +34,7 @@ function MapModel( canvas ) {
 				var position = (this.specials[ element ])[ block ].split(",") ;
 				var xArr = [position[0],position[2] || position[0]].sort();
 				var yArr = [position[1],position[3] || position[1]].sort();
-
+				
 				if(xArr[ 0 ] == xArr[ 1 ]){
 					x = xArr[0];
 					for(y = yArr[ 0 ]; y <= yArr[ 1 ]; y++){
@@ -52,6 +54,7 @@ function MapModel( canvas ) {
 						for(y = yArr[ 0 ]; y < yArr[ 1 ]; y++){
 							this.activeBoard[ x ][ y ] = element;
 							this.countMultiplier(element);
+
 						}
 					}
 				}
@@ -66,5 +69,18 @@ function MapModel( canvas ) {
 		else{
 			this.pointsMultiplier++;
 		}
+	}
+	
+	this.countDisabled = function( ) {
+	
+		for( var row in this.activeBoard ) {
+			for ( var column = 0; column < this.activeBoard[row].length; column++ ) {
+				if(this.activeBoard[row][column] == 'disabled'){
+					this.disabled_squares++;
+				}
+			}
+		}
+	
+		
 	}
 }

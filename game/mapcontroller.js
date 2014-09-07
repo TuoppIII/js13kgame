@@ -9,26 +9,89 @@ function MapController( boardModel ) {
 		this.board.activeBoard[x][y] = element;
 	}
 
+
 	this.checkValid = function ( x, y, element ) {
 		square_type = this.board.activeBoard[x][y];
 		//block elements have b as first character. Need to be removed before comparison.
-		if( square_type === undefined || square_type == "optional" || square_type == element.substr(2)){
-			return true;
-		} else {
-			if(square_type.substr(0,2) == "b_"){
-				graph.printFeedBack("Can't put a block on top of another block!");
+		if( this.checkAdjacentSquares(x, y, element) ){
+			if( square_type === undefined || square_type == "optional" || square_type == element.substr(2)){
+				return true;
+			} else {
+				if(square_type.substr(0,2) == "b_"){
+					graph.printFeedBack("Can't put a block on top of another block!");
+				}
+				else if(square_type == "blank"){
+					graph.printFeedBack("Blank squares must be left empty!");
+				}
+				else if(square_type != element.substr(0,2) && square_type != "disabled"){
+					graph.printFeedBack("Cannot put "+ element.substr(2) +" on square requiring "+ square_type +"!");
+				}
+				else{
+					graph.printFeedBack("Block must be completely inside game area!");
+				}
+				return false;
 			}
-			else if(square_type == "blank"){
-				graph.printFeedBack("Blank squares must be left empty!");
-			}
-			else if(square_type != element.substr(0,2)){
-				graph.printFeedBack("Cannot put "+ element.substr(2) +" on square requiring "+ square_type +"!");
-			}
-			else{
-				graph.printFeedBack("Block must be completely inside game area!");
-			}
+		}
+		else{
 			return false;
 		}
+	}
+	this.checkAdjacentSquares = function ( x, y, element){
+			adjacent_square_types = [];
+		
+			//find all adjacent elements to this square
+			if( x != 0 ){
+				adjacent_square_types.push(this.board.activeBoard[x-1][y]);
+			}
+			if( this.board.activeBoard.length > x+1 ){
+				adjacent_square_types.push(this.board.activeBoard[x+1][y]);
+			}
+			if( y != 0 ){
+				adjacent_square_types.push(this.board.activeBoard[x][y-1]);
+			}
+			if( this.board.activeBoard[x].length > y+1 ){
+				adjacent_square_types.push(this.board.activeBoard[x][y+1]);
+			}
+			//remove type undefined elements
+			adjacent_square_types = adjacent_square_types.filter(function(n){ return n != undefined });
+			
+			adjacent_ok = true;
+			switch (element) {
+				case 'b_fire' :
+					if(adjacent_square_types.indexOf("water") > -1 || adjacent_square_types.indexOf("b_water") > -1){
+						graph.printFeedBack("fire can't be next to water!");
+						adjacent_ok = false;
+					}
+					else if(adjacent_square_types.indexOf("earth") > -1 || adjacent_square_types.indexOf("b_earth") > -1){
+						graph.printFeedBack("fire can't be next to earth!");
+						adjacent_ok = false;
+					}
+					break;
+				case 'b_water' :
+					if(adjacent_square_types.indexOf("fire") > -1 || adjacent_square_types.indexOf("b_fire") > -1){
+						graph.printFeedBack("water can't be next to fire!");
+						adjacent_ok = false;
+					}
+					else if(adjacent_square_types.indexOf("earth") > -1 || adjacent_square_types.indexOf("b_earth") > -1){
+						graph.printFeedBack("water can't be next to earth!");
+						adjacent_ok = false;
+					}
+					break;
+				case 'b_earth' :
+					if(adjacent_square_types.indexOf("water") > -1 || adjacent_square_types.indexOf("b_water") > -1){
+						graph.printFeedBack("earth can't be next to water!");
+						adjacent_ok = false;
+					}
+					else if(adjacent_square_types.indexOf("fire") > -1 || adjacent_square_types.indexOf("b_fire") > -1){
+						graph.printFeedBack("earth can't be next to fire!");
+						adjacent_ok = false;
+					}
+					break;
+				default :
+					break;
+			}
+			return adjacent_ok;
+			
 	}
 	
 	this.checkSuccess = function ( ){
@@ -46,10 +109,13 @@ function MapController( boardModel ) {
 			}
 		}
 		
-		if ( success ) {
+		if ( success && map.lookup[parseInt(map.id)+1] !== undefined) {
 			// Show next button
 			var nextBtn = document.getElementById("NextLevelBtn");
 			nextBtn.style.visibility = "visible";
+		}
+		else if(success){
+			graph.printFeedBack("No more levels. Congratulations! You have passed all levels! ")
 		}
 		return success;
  	}
@@ -59,7 +125,7 @@ function MapController( boardModel ) {
 		if (  this.checkValid(x1, y1, element)  &&
 			this.checkValid(x2, y2, element)  &&
 			this.checkValid(x3, y3, element) &&
-			this.checkValid(x4, y4, element) ) {
+			this.checkValid(x4, y4, element)) {
 			this.board.activeBoard[x1][y1] = element;
 			this.board.activeBoard[x2][y2] = element;
 			this.board.activeBoard[x3][y3] = element;
