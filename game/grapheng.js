@@ -16,12 +16,12 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	// Offsets for different game parts
 	this.boardStartX = 5;
 	this.boardStartY = 30;
-	this.boardBlockX = 200;
-	this.boardBlockY = 40;
+	this.boardBlockXinit = 330;
+	this.boardBlockYinit = 40;
 	
 	// defaults for block and cell sizes
-	this.boardBlockSize = 16;
-	this.boardCellSize = 18;
+	this.boardBlockSize = 14;
+	this.boardCellSize = 16;
 	
 	this.addingElement = false;
 	this.lastLoc = { x:0, y:0 };
@@ -51,8 +51,8 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		this.ctx.beginPath();
 		this.ctx.clearRect( 0,0, this.c.width, this.c.height );
 
-		this.boardBlockX = 200;
-		this.boardBlockY = 40;
+		this.boardBlockX = this.boardBlockXinit;
+		this.boardBlockY = this.boardBlockYinit;
 		
 		// draw different parts
 		this.drawInfo();
@@ -200,6 +200,12 @@ function GraphEngine( canvas, boardModel, boardController ) {
 						break;
 				}
 				this.boardBlockY += this.boardBlockSize * 3;
+				console.log("New block column: " + this.boardBlockX + "," + this.boardBlockY + "," + this.c.height );
+				if ( this.boardBlockY + this.boardBlockSize * 2 > this.c.height ) {
+					// create new column
+					this.boardBlockX = this.boardBlockX + this.boardBlockSize * 8;
+					this.boardBlockY = this.boardBlockYinit;
+				}
 			}
 		}
 	}

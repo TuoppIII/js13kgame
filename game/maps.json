@@ -105,4 +105,19 @@ jsonstr = [
 		"b_fire": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 0 },
 	}
 },
+{
+	"id": 99,"name": "Max reference", size: { "x": 20, "y": 20},
+	"special_squares":{
+		"fire": ["3,2,4,4"],
+		"air": ["6,2,6,4","7,2"],
+		"water": [],
+		"earth": []
+	},
+	"blocks": {
+		"b_earth": { "s": 1, "sq": 2, "t": 3, "l": 2, "i": 1 },
+		"b_air": { "s": 1, "sq": 3, "t": 0, "l": 1, "i": 1 },
+		"b_water": { "s": 1, "sq": 2, "t": 3, "l": 1, "i": 4 },
+		"b_fire": { "s": 1, "sq": 1, "t": 2, "l": 3, "i": 0 },
+	}
+},
 ];
