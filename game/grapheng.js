@@ -41,7 +41,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		this.c.addEventListener( "mousemove", this.doMouseMove.bind( this ) );
 		window.addEventListener( "keydown", this.doKeyDown.bind( this ), false );
 		
-		var seconds_left = this.rowCount * this.colCount - map.disabled_squares;
+		var seconds_left = (this.rowCount * this.colCount - map.disabled_squares)*2;
 		this.updateTimer(parseInt(seconds_left / 60), parseInt(seconds_left % 60))
 	};
 	
@@ -106,7 +106,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				this.ctx.fillStyle = "#000000";
 				break;
 			case 'optional':
-				this.ctx.fillStyle = "#ebebeb";
+				this.ctx.fillStyle = "#D2D2D2";
 				break;
 			case 'blank':
 				this.ctx.fillStyle = "#FFE5CC";
@@ -455,7 +455,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		//Calculate the available time
 		//+1 because otherwise timer would jump 2s on first interval
 		
-		var availableTime = (this.rowCount * this.colCount + 1 - map.disabled_squares) * 1000;
+		var availableTime = (this.rowCount * this.colCount + 1 - map.disabled_squares) * 2 * 1000;
 		
 		// set the date we're counting down to
 		var targetDate = Date.now() + availableTime;
