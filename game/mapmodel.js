@@ -4,6 +4,8 @@ function MapModel( canvas ) {
 	this.lookup = {};
 	this.pointsMultiplier = 0;
 	this.disabled_squares = 0;
+	this.no_multiplier;
+	this.no_timer;
 	
 	// Initialization function
 	this.init = function( id ) {
@@ -17,6 +19,8 @@ function MapModel( canvas ) {
 		this.specials = this.lookup[id].special_squares;
 		this.size = this.lookup[id].size;
 		this.blocks = this.lookup[id].blocks;
+		this.no_multiplier = this.lookup[id].no_multiplier || ["disabled"]
+		this.no_timer = this.lookup[id].no_timer || ["disabled"]
 		
 		// Init board & data
 		this.activeBoard = new Array( this.size.x );
@@ -70,6 +74,9 @@ function MapModel( canvas ) {
 		if(element == 'optional'){
 			this.pointsMultiplier--;
 		}
+		else if(element == "disabled" || this.no_multiplier.indexOf(element) > -1){
+		
+		}
 		else{
 			this.pointsMultiplier++;
 		}
@@ -79,7 +86,8 @@ function MapModel( canvas ) {
 	
 		for( var row in this.activeBoard ) {
 			for ( var column = 0; column < this.activeBoard[row].length; column++ ) {
-				if(this.activeBoard[row][column] == 'disabled'){
+				element = this.activeBoard[row][column];
+				if( element == 'disabled' || this.no_timer.indexOf(element) > -1){
 					this.disabled_squares++;
 				}
 			}
