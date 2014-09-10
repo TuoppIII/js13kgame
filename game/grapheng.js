@@ -19,10 +19,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.boardBlockXinit = 330;
 	this.boardBlockYinit = 40;
 	
-	// defaults for block and cell sizes
-	this.boardBlockSize = 14;
-	this.boardCellSize = 16;
-	
 	this.addingElement = false;
 	this.lastLoc = { x:0, y:0 };
 	this.orientation = 0;
@@ -43,6 +39,12 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		
 		var seconds_left = (this.rowCount * this.colCount - map.disabled_squares)*2;
 		this.updateTimer(parseInt(seconds_left / 60), parseInt(seconds_left % 60))
+		
+		// defaults for block and cell sizes, 14 + 2 * 20 = 320
+		var maxDim = this.rowCount > this.colCount ? this.rowCount : this.colCount;
+		this.boardCellSize = Math.floor( 320 / maxDim ) > 24 ? 24 : Math.floor( 320 / maxDim );
+		console.log("board cell size:" + this.boardCellSize);
+		this.boardBlockSize = this.boardCellSize - 2;
 	};
 	
 	// Draws current state of the game
@@ -55,6 +57,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		this.boardBlockY = this.boardBlockYinit;
 		
 		// draw different parts
+		this.ctx.strokeRect( this.boardStartX, this.boardStartY, this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize );
 		this.drawInfo();
 		this.drawBlocks();
 		this.drawGame();
@@ -75,7 +78,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawGame = function() {
 		// Draw current game situation		
 		for( var row in this.board.activeBoard ) {
-			//console.log( this.board.activeBoard[row] );
 			for ( var column = 0; column < this.board.activeBoard[row].length; column++ ) {
 				this.drawBoardElement( this.board.activeBoard[row][column], row, column );
 			}
@@ -200,7 +202,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 						break;
 				}
 				this.boardBlockY += this.boardBlockSize * 3;
-				console.log("New block column: " + this.boardBlockX + "," + this.boardBlockY + "," + this.c.height );
 				if ( this.boardBlockY + this.boardBlockSize * 2 > this.c.height ) {
 					// create new column
 					this.boardBlockX = this.boardBlockX + this.boardBlockSize * 8;
@@ -392,6 +393,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 					this.ctx.strokeStyle = "#FFFFFF";
 					
 					this.lastBlockLoc = { x1: x1, y1: y1 };
+					
+					// Draw shape to board
+					this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 					break;
 				}
 			}
@@ -400,11 +404,11 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	this.draftBlock = function( x, y ) {
 		if ( this.boardState ) {
-			this.ctx.putImageData( this.boardState, this.boardStartX, this.boardStartY );
+			this.ctx.putImageData( this.boardState, this.boardStartX - 1, this.boardStartY - this.boardCellSize - 1 );
 		}
 		// Save current board so that we can draw over it
-		this.boardState = this.ctx.getImageData( this.boardStartX, this.boardStartY, 
-			this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize 
+		this.boardState = this.ctx.getImageData( this.boardStartX - 1,  this.boardStartY - this.boardCellSize - 1, 
+			this.colCount * this.boardCellSize + 2, ( this.rowCount + 1 ) * this.boardCellSize + 2
 			);
 		
 		// Draw block baesed on type and element
@@ -431,8 +435,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	}
 		
 	this.doKeyDown = function( event ) {
-		console.log( "key event: " + event.keyCode );
-		// TODO route to controller to handle block orientation
+		// Route to controller to handle block orientation
 		if ( event.keyCode == 65 ) {
 			this.orientation++;
 		} else if ( event.keyCode == 68 ) {
@@ -442,7 +445,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		}
 		this.orientation = this.orientation < 0 ? this.orientation += 4 : this.orientation;
 		this.orientation = this.orientation >= 4 ? this.orientation -= 4 : this.orientation;
-		console.log( this.orientation, this.flipped );
 		this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 	}
 

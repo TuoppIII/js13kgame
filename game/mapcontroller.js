@@ -5,7 +5,6 @@ function MapController( boardModel ) {
 	this.board = boardModel;
 	
 	this.addElement = function(element, x, y) {
-		console.log( "addElement: " + x + "," + y + "/" + (this.board.activeBoard[x][y]));
 		this.board.activeBoard[x][y] = element;
 	}
 
@@ -136,7 +135,6 @@ function MapController( boardModel ) {
 	}
 	
 	this.addBlock = function(  element, type, x, y, orientation, flipped )  {
-		console.log( "adding block: ", element, type, x, y, orientation, flipped );
 		var result = false;
 		
 		switch ( type ) {
@@ -177,7 +175,6 @@ function MapController( boardModel ) {
 				} else {
 					if ( orientation == 0 || orientation == 2 ) {
 						if ( orientation == 0 ) {
-							console.log( "Hep" );
 							result = this.addBlockToModel(  element, x, y, x, y + 1, x + 1, y + 1, x + 2, y + 1 );
 						} else {
 							result = this.addBlockToModel(  element, x, y, x + 1, y, x + 2, y, x + 2, y + 1 );

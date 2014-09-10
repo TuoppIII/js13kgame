@@ -1,13 +1,13 @@
 jsonstr = [ 
 {
-	"id": 1,"name": "Tutorial lvl 1","size": { "x": 4, "y": 2},
+	"id": 1,"name": "Basic Tutorial","size": { "x": 4, "y": 2},
 	"special_squares":{},
 	"blocks":{
 		"b_earth": { "s": 0, "sq": 0, "t": 0, "l": 2, "i": 0 }
 	}
 },
 {
-	"id": 2,"name": "Tutorial lvl 2","size": { "x": 5, "y": 5},
+	"id": 2,"name": "Blanks and Optionals","size": { "x": 5, "y": 5},
 	"special_squares":{
 		"blank": ["0,0,0,4"],
 		"optional": ["4,0,4,4"],
@@ -76,7 +76,7 @@ jsonstr = [
 	}
 },
 {
-	"id": 9,"name": "Tutorial lvl 3","size": { "x": 4, "y": 5},
+	"id": 9,"name": "Elements Tutorial","size": { "x": 4, "y": 5},
 	"special_squares":{},
 	"blocks": {
 		"b_fire": { "s": 0, "sq": 0, "t": 0, "l": 0, "i": 1 },
@@ -86,7 +86,7 @@ jsonstr = [
    }
 },
 {
-	"id": 10,"name": "Tutorial lvl 4","size": { "x": 4, "y": 5},
+	"id": 10,"name": "Required Elements","size": { "x": 4, "y": 5},
 	"special_squares":{
 		"fire": ["0,0,3,0"],
 		"air": ["0,1,3,1","0,3,3,3"],
@@ -138,7 +138,7 @@ jsonstr = [
 	}
 },
 {
-	"id": 15,"name": "Know your elements 2","size": { "x": 10, "y": 6},
+	"id": 15,"name": "Know your elements II","size": { "x": 10, "y": 6},
 	"special_squares":{
 		"fire": ["3,2,4,3"],
 		"air": ["6,2,6,4","7,2"],
@@ -180,6 +180,59 @@ jsonstr = [
 		"b_water": { "s": 4, "sq": 2, "t": 2, "l": 0, "i": 0 },
 	}
 },
+{
+	"id": 18,"name": "Symmetry","size": { "x": 6, "y": 4 },
+	"special_squares":{
+		"disabled" : [ "0,0", "5,0", "0,3", "5,3" ],
+	},
+	"blocks": {
+		"b_air": { "s": 4 },
+		"b_water": { "sq": 1 }
+	}
+},
+{
+	"id": 19,"name": "It's all about L's","size": { "x": 6, "y": 4 },
+	"special_squares":{
+	},
+	"blocks": {
+		"b_air": { "s": 0, "sq": 0, "t": 0, "l": 3, "i": 0 },
+		"b_earth": { "s": 0, "sq": 0, "t": 0, "l": 3, "i": 0 },
+	}
+},
+{
+	"id": 20,"name": "It's all about L's II","size": { "x": 5, "y": 5 },
+	"special_squares":{
+		"blank": [ "4, 4" ]
+	},
+	"blocks": {
+		"b_air": { "s": 0, "sq": 0, "t": 0, "l": 3, "i": 0 },
+		"b_earth": { "s": 0, "sq": 0, "t": 0, "l": 3, "i": 0 },
+	}
+},
+{
+	"id": 21,"name": "It's all about S'es","size": { "x": 5, "y": 6 },
+	"special_squares":{
+		"optional" : [ "0,0,0,1", "4,4,4,5" ],
+		"disabled" : [ "0,4,0,5", "1,5,2,5", "3,0,4,0", "4,1,4,2" ],
+	},
+	"blocks": {
+		"b_fire": { "s": 2, "sq": 0, "t": 0, "l": 0, "i": 0 },
+		"b_air": { "s": 2, "sq": 0, "t": 0, "l": 0, "i": 0 },
+		"b_water": { "s": 1, "sq": 0, "t": 0, "l": 0, "i": 0 },
+	}
+},
+{
+	"id": 22,"name": "It's all about T's","size": { "x": 6, "y": 5 },
+	"special_squares":{
+		"disabled" : [ "4,0,5,0", "0,3,1,4" ],
+	},
+	"blocks": {
+		"b_fire": { "s": 0, "sq": 0, "t": 2, "l": 0, "i": 0 },
+		"b_air": { "s": 0, "sq": 0, "t": 2, "l": 0, "i": 0 },
+		"b_water": { "s": 0, "sq": 0, "t": 2, "l": 0, "i": 0 },
+	}
+},
+
 ];
 jsonstr_tst = [{
 	"id": 99,"name": "Max reference", size: { "x": 20, "y": 20},
