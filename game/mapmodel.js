@@ -36,8 +36,8 @@ function MapModel( canvas ) {
 		for ( var element in this.specials ) {
 			for ( var block in this.specials[ element ] ) {
 				var position = (this.specials[ element ])[ block ].split(",") ;
-				var xArr = [position[0],position[2] || position[0]].sort(sortNumber);
-				var yArr = [position[1],position[3] || position[1]].sort(sortNumber);
+				var xArr = [parseInt(position[0]),parseInt(position[2]) || parseInt(position[0])].sort(sortNumber);
+				var yArr = [parseInt(position[1]),parseInt(position[3]) || parseInt(position[1])].sort(sortNumber);
 				
 				if(xArr[ 0 ] == xArr[ 1 ]){
 					x = xArr[0];
