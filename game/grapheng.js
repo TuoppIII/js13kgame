@@ -393,6 +393,9 @@ function GraphEngine( canvas, boardModel, boardController ) {
 					this.ctx.strokeStyle = "#FFFFFF";
 					
 					this.lastBlockLoc = { x1: x1, y1: y1 };
+					
+					// Draw shape to board
+					this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 					break;
 				}
 			}
