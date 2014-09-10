@@ -55,6 +55,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		this.boardBlockY = this.boardBlockYinit;
 		
 		// draw different parts
+		this.ctx.strokeRect( this.boardStartX, this.boardStartY, this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize );
 		this.drawInfo();
 		this.drawBlocks();
 		this.drawGame();
@@ -400,11 +401,11 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	
 	this.draftBlock = function( x, y ) {
 		if ( this.boardState ) {
-			this.ctx.putImageData( this.boardState, this.boardStartX, this.boardStartY );
+			this.ctx.putImageData( this.boardState, this.boardStartX - 1, this.boardStartY - this.boardCellSize - 1 );
 		}
 		// Save current board so that we can draw over it
-		this.boardState = this.ctx.getImageData( this.boardStartX, this.boardStartY, 
-			this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize 
+		this.boardState = this.ctx.getImageData( this.boardStartX - 1,  this.boardStartY - this.boardCellSize - 1, 
+			this.colCount * this.boardCellSize + 2, ( this.rowCount + 1 ) * this.boardCellSize + 2
 			);
 		
 		// Draw block baesed on type and element
