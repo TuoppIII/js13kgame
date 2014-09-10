@@ -13,19 +13,16 @@ function MapController( boardModel ) {
 		square_type = this.board.activeBoard[x][y];
 		//block elements have b as first character. Need to be removed before comparison.
 		if( this.checkAdjacentSquares(x, y, element) ){
-			if( square_type === undefined || square_type == "optional" || square_type == element.substr(2)){
+			if( (square_type === undefined && x > -1 && y > -1) || square_type == "optional" || square_type == element.substr(2)){
 				return true;
 			} else {
-				if(square_type.substr(0,2) == "b_"){
+				if(square_type !== undefined && square_type.substr(0,2) == "b_"){
 					graph.printFeedBack("Can't put a block on top of another block!");
-				}
-				else if(square_type == "blank"){
+				} else if(square_type == "blank"){
 					graph.printFeedBack("Blank squares must be left empty!");
-				}
-				else if(square_type != element.substr(0,2) && square_type != "disabled"){
+				}	else if(square_type !== undefined && square_type != element.substr(0,2) && square_type != "disabled"){
 					graph.printFeedBack("Cannot put "+ element.substr(2) +" on square requiring "+ square_type +"!");
-				}
-				else{
+				}	else{
 					graph.printFeedBack("Block must be completely inside game area!");
 				}
 				return false;

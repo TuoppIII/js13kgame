@@ -7,72 +7,86 @@
   </head>
   <body>
     <table style="border:1px solid #000000; background: linear-gradient(to bottom right, #DDFFDD , #DDDDFF);">
-	<tr>
-	  <td colspan="3" align="center"><h1>Little element game</h1></td>
-	</tr>
-	<tr>
-	  <td><p id="countdown"></p></td>
-	  <td align="center"><h3 id="success"></h3></td>
-	  <td><p id="points"></p></td>
-	</tr>
-	<tr>
-	  <td colspan="2" align="right">
-            <canvas id="testCanvas" width="660" height="360" style="float:left;">   
-            </canvas>
-	</td>
-	<td style="vertical-align: top;">
-	  <table style="float:left;">
-		<tr>
-			<td style="border: 1px solid black;" border="1" bgcolor="#FF4500"></td>
-			<td>Fire: Burns earth</td>
-		</tr>
-		<tr>
-			<td style="border: 1px solid black;" bgcolor="#0000FF"></td>
-			<td>Water: Floods earth and puts out fire</td>
-		</tr>
-		<tr>
-			<td style="border: 1px solid black;" bgcolor="#00FFFF"></td>
-			<td>Air: Can be put next to any block</td>
-		</tr>
-		<tr>
-			<td style="border: 1px solid black;" bgcolor="#37E21D"></td>
-			<td>Earth: No special skill</td>
-		</tr>
-		<tr>
-			<td style="border: 1px solid black;" bgcolor="#D2D2D2"></td>
-			<td>Optional: Can be left empty or filled</td>
-		</tr>
-		<tr>
-			<td style="border: 1px solid black;" bgcolor="#FFFFFF"></td>
-			<td>Blank: Must be left empty</td>
-		</tr>
-		<tr>
-			<td><b>a,s,d</b></td>
-			<td>Rotate block</td>
-		</tr>
-	  </table>
-	</td>
-	</tr>
-	<tr>
-	<td colspan="2" align="center">
-	  <b id="feedback"></b>
-	  <button id="NextLevelBtn" type="button" style="visibility:hidden">Next level!!</button>
-	</td>
-	<td>	
-	  <select id="ChangeLevelLst" size="4" width="200">
-	  </select>
-	  <button id="ChangeLevelBtn" type="button">Select level</button>
-	  <button id="RestartLevelBtn" type="button">Restart level</button>
-	</td>
-	</tr>
-	</table>
-	
-	
-	<!-- Used scripts below -->
-	<script src="maps.json"></script>
-	<script src="grapheng.js"></script>
-	<script src="mapmodel.js"></script>
-	<script src="mapcontroller.js"></script>
-	<script src="main.js"></script>
-  </body>
-</html>
+      <tr>
+        <td colspan="3" align="center"><h1>Little element game</h1></td>
+      </tr>
+      <tr>
+        <td><p id="countdown"></p></td>
+        <td align="center"><h3 id="success"></h3></td>
+        <td><p id="points"></p></td>
+      </tr>
+      <tr>
+        <td colspan="2" align="right">
+          <canvas id="testCanvas" width="660" height="360" style="float:left;">   
+          </canvas>
+        </td>
+        <td style="vertical-align: top;">
+          <table>
+            <tr>
+              <td>
+                <table style="float:left;">
+                  <tr>
+                    <td style="border: 1px solid black; background-color:#FF4500;" border="1" ></td>
+                    <td>Fire: Burns earth</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; background-color:#0000FF;"></td>
+                    <td>Water: Floods earth and puts out fire</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; background-color: #00FFFF"></td>
+                    <td>Air: Can be put next to any block</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; background-color: #37E21D"></td>
+                    <td>Earth: No special skill</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; background-color: #D2D2D2"></td>
+                    <td>Optional: Can be left empty or filled</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black; background-color: #FFFFFF"></td>
+                    <td>Blank: Must be left empty</td>
+                  </tr>
+                  <tr>
+                    <td><b>a,s,d</b></td>
+                    <td>Rotate block</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select id="ChangeLevelLst" size="10" width="200">
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button id="ChangeLevelBtn" type="button">Select level</button>
+              </td>
+            </tr>
+            </table
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            <b id="feedback"></b>
+            <button id="NextLevelBtn" type="button" style="visibility:hidden">Next level!!</button>
+          </td>
+          <td>	
+            <button id="RestartLevelBtn" type="button">Restart level</button>
+          </td>
+        </tr>
+      </table>
+
+
+      <!-- Used scripts below -->
+      <script src="maps.json"></script>
+      <script src="grapheng.js"></script>
+      <script src="mapmodel.js"></script>
+      <script src="mapcontroller.js"></script>
+      <script src="main.js"></script>
+    </body>
+  </html>
