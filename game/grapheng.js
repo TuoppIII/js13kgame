@@ -40,9 +40,11 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		var seconds_left = (this.rowCount * this.colCount - map.disabled_squares)*2;
 		this.updateTimer(parseInt(seconds_left / 60), parseInt(seconds_left % 60))
 		
-		// defaults for block and cell sizes
-		this.boardBlockSize = 14;
-		this.boardCellSize = this.boardBlockSize + 2;
+		// defaults for block and cell sizes, 14 + 2 * 20 = 320
+		var maxDim = this.rowCount > this.colCount ? this.rowCount : this.colCount;
+		this.boardCellSize = Math.floor( 320 / maxDim ) > 24 ? 24 : Math.floor( 320 / maxDim );
+		console.log("board cell size:" + this.boardCellSize);
+		this.boardBlockSize = this.boardCellSize - 2;
 	};
 	
 	// Draws current state of the game
