@@ -57,7 +57,8 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		this.boardBlockY = this.boardBlockYinit;
 		
 		// draw different parts
-		this.ctx.strokeRect( this.boardStartX, this.boardStartY, this.colCount * this.boardCellSize, this.rowCount * this.boardCellSize );
+		this.ctx.strokeRect( this.boardStartX - 3, this.boardStartY - 3, 
+			this.colCount * this.boardCellSize + 6, this.rowCount * this.boardCellSize + 6 );
 		this.drawInfo();
 		this.drawBlocks();
 		this.drawGame();
