@@ -180,7 +180,8 @@ jsonstr = [
 		"b_water": { "s": 4, "sq": 2, "t": 2, "l": 0, "i": 0 },
 	}
 },
-{
+];
+jsonstr_tst = [{
 	"id": 99,"name": "Max reference", size: { "x": 20, "y": 20},
 	"special_squares":{
 		"fire": ["3,2,4,4"],
@@ -194,5 +195,4 @@ jsonstr = [
 		"b_water": { "s": 1, "sq": 2, "t": 3, "l": 1, "i": 4 },
 		"b_fire": { "s": 1, "sq": 1, "t": 2, "l": 3, "i": 0 },
 	}
-},
-];
+}];
