@@ -109,7 +109,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				this.ctx.fillStyle = "#D2D2D2";
 				break;
 			case 'blank':
-				this.ctx.fillStyle = "#FFE5CC";
+				this.ctx.fillStyle = "#FFFFFF";
 				break;
 			default:
 				this.ctx.fillStyle = "#909090";
