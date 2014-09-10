@@ -76,7 +76,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.drawGame = function() {
 		// Draw current game situation		
 		for( var row in this.board.activeBoard ) {
-			//console.log( this.board.activeBoard[row] );
 			for ( var column = 0; column < this.board.activeBoard[row].length; column++ ) {
 				this.drawBoardElement( this.board.activeBoard[row][column], row, column );
 			}
@@ -201,7 +200,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 						break;
 				}
 				this.boardBlockY += this.boardBlockSize * 3;
-				console.log("New block column: " + this.boardBlockX + "," + this.boardBlockY + "," + this.c.height );
 				if ( this.boardBlockY + this.boardBlockSize * 2 > this.c.height ) {
 					// create new column
 					this.boardBlockX = this.boardBlockX + this.boardBlockSize * 8;
@@ -435,8 +433,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	}
 		
 	this.doKeyDown = function( event ) {
-		console.log( "key event: " + event.keyCode );
-		// TODO route to controller to handle block orientation
+		// Route to controller to handle block orientation
 		if ( event.keyCode == 65 ) {
 			this.orientation++;
 		} else if ( event.keyCode == 68 ) {
@@ -446,7 +443,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		}
 		this.orientation = this.orientation < 0 ? this.orientation += 4 : this.orientation;
 		this.orientation = this.orientation >= 4 ? this.orientation -= 4 : this.orientation;
-		console.log( this.orientation, this.flipped );
 		this.draftBlock( this.lastLoc.x, this.lastLoc.y );
 	}
 

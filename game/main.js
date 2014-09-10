@@ -42,7 +42,6 @@ graph.draw();
 var buttonClickEvent = function( event ) {
 	// Load level based on ChangeLevetLst
 	var selectBox = document.getElementById("ChangeLevelLst");
-	//console.log( location.href.substring(0, location.href.indexOf("#") ) );
 	if ( selectBox.selectedIndex >= 0 ) {
 		location.replace( location.href.substring(0, location.href.indexOf("#") ) + "#" +  selectBox.options[ selectBox.selectedIndex ].value ); // select new level...
 		location.reload(); // ... and reload it
