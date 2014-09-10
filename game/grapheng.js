@@ -19,10 +19,6 @@ function GraphEngine( canvas, boardModel, boardController ) {
 	this.boardBlockXinit = 330;
 	this.boardBlockYinit = 40;
 	
-	// defaults for block and cell sizes
-	this.boardBlockSize = 14;
-	this.boardCellSize = 16;
-	
 	this.addingElement = false;
 	this.lastLoc = { x:0, y:0 };
 	this.orientation = 0;
@@ -43,6 +39,10 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		
 		var seconds_left = (this.rowCount * this.colCount - map.disabled_squares)*2;
 		this.updateTimer(parseInt(seconds_left / 60), parseInt(seconds_left % 60))
+		
+		// defaults for block and cell sizes
+		this.boardBlockSize = 14;
+		this.boardCellSize = this.boardBlockSize + 2;
 	};
 	
 	// Draws current state of the game
