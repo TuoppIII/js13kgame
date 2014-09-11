@@ -39,6 +39,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 		
 		var seconds_left = (this.rowCount * this.colCount - map.disabled_squares)*2;
 		this.updateTimer(parseInt(seconds_left / 60), parseInt(seconds_left % 60))
+		document.getElementById("success").innerHTML = "Fill the board with the provided blocks using mouse and keys a,s,d"
 		
 		// defaults for block and cell sizes, 14 + 2 * 20 = 320
 		var maxDim = this.rowCount > this.colCount ? this.rowCount : this.colCount;
@@ -95,7 +96,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				break;
 			case 'air':
 			case 'b_air':
-				this.ctx.fillStyle = "#00FFFF";
+				this.ctx.fillStyle = "#08BDEB";
 				break;
 			case 'water':
 			case 'b_water':
@@ -103,7 +104,7 @@ function GraphEngine( canvas, boardModel, boardController ) {
 				break;
 			case 'earth':
 			case 'b_earth':
-				this.ctx.fillStyle = "#37E21D";
+				this.ctx.fillStyle = "#2FC418";
 				break;
 			case 'disabled':
 				this.ctx.fillStyle = "#000000";
